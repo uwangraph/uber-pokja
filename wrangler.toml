@@ -1,5 +1,5 @@
 name = "uber-pokja-tenjolaya"
-account_id = "1ef2e18dc9de53cb201f3ca19b77bebb"
+account_id = "cdcd2c8177520b10e161f95fb0e12220"
 workers_dev = true
 compatibility_date = "2026-09-25"
 main = ".svelte-kit/cloudflare/_worker.js"
