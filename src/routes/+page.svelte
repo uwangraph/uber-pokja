@@ -44,9 +44,6 @@
 						<p class="text-xs text-brand-100">Majelis Taklim Tenjolaya</p>
 					</div>
 				</div>
-				<a href="/marketplace" class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-brand-100 transition hover:bg-white/10">
-					<span class="size-1.5 rounded-full bg-gold-400"></span> Marketplace
-				</a>
 			</nav>
 
 			<div class="grid items-center gap-12 pt-10 pb-28 lg:grid-cols-[1.1fr_1fr] lg:pt-16 lg:pb-36">
