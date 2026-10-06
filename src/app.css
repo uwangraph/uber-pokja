@@ -1,0 +1,180 @@
+@import 'tailwindcss';
+/* Komponen Khwarizmi UI: Tailwind v4 tidak memindai node_modules, jadi didaftarkan manual */
+@source '../node_modules/@khwarizmi/svelte-ui/dist';
+@import '@khwarizmi/svelte-ui/styles.css';
+
+/* Warna utama Khwarizmi UI = hijau zamrud UBER POKJA */
+:root {
+	--primary: #1f8a5b;
+	--primary-shade: #0f5a3a;
+}
+
+@theme {
+	--font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+
+	/* Netral */
+	--color-ground: #f4f5f2;
+	--color-ink: #101a15;
+	--color-muted: #5f6b65;
+	--color-line: #e7e9e4;
+	--color-line-strong: #d6dad3;
+
+	/* Hijau zamrud (warna utama) */
+	--color-brand-50: #edf7f2;
+	--color-brand-100: #d3ede0;
+	--color-brand-200: #a8dbc0;
+	--color-brand-500: #1f8a5b;
+	--color-brand-600: #157049;
+	--color-brand-700: #0f5a3a;
+	--color-brand-800: #0b432c;
+	--color-brand-900: #072e1f;
+
+	/* Emas dari logo (aksen) */
+	--color-gold-50: #fef8e6;
+	--color-gold-400: #f2c230;
+	--color-gold-700: #7a5500;
+
+	/* Status */
+	--color-amber-ink: #8a4b00;
+	--color-amber-soft: #fff4e0;
+	--color-danger: #b42318;
+	--color-danger-soft: #fef1f0;
+
+	/* Elevasi khas Khwarizmi: garis bayangan pendek membuat komponen terasa
+	   terangkat, sedangkan popover/modal mendapat bayangan yang lebih dalam. */
+	--shadow-card: 0 4px 0 #e2e8f0, 0 8px 18px -14px rgb(16 26 21 / 0.28);
+	--shadow-pop: 0 18px 42px -12px rgb(16 26 21 / 0.28), 0 5px 0 #d6dad3;
+}
+
+html {
+	-webkit-tap-highlight-color: transparent;
+}
+body {
+	@apply bg-ground font-sans text-ink antialiased;
+	font-feature-settings: 'ss01', 'cv11';
+}
+::selection {
+	background: var(--color-brand-100);
+}
+
+/* Halaman marketplace juga memakai elemen HTML biasa, bukan selalu komponen
+   UI. Berikan elevasi yang sama agar kartu, panel, dan form terasa konsisten. */
+main :is(.rounded-xl.border, .rounded-2xl.border, .rounded-3xl.border) {
+	box-shadow: var(--shadow-card);
+}
+main :is(input:not([type='checkbox']):not([type='radio']), select, textarea) {
+	box-shadow: 0 2px 0 #e2e8f0;
+}
+main :is(button.rounded-xl, button.rounded-2xl, a.rounded-xl, a.rounded-2xl) {
+	box-shadow: 0 2px 0 rgb(148 163 184 / 0.7);
+}
+[role='dialog'] {
+	box-shadow: var(--shadow-pop) !important;
+}
+
+@utility card {
+	@apply rounded-2xl border border-line bg-white shadow-card;
+}
+@utility btn {
+	@apply inline-flex min-h-10 items-center justify-center gap-2 rounded-xl [&_svg]:shrink-0 px-4 text-sm font-semibold whitespace-nowrap transition focus-visible:ring-4 focus-visible:ring-brand-100 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50;
+}
+@utility btn-primary {
+	@apply btn bg-brand-600 text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.12),0_1px_2px_rgb(7_46_31/0.25)] hover:bg-brand-700;
+}
+@utility btn-ghost {
+	@apply btn border border-line-strong bg-white text-ink shadow-card hover:border-brand-200 hover:bg-brand-50/50;
+}
+@utility input {
+	@apply min-h-11 w-full rounded-xl border border-line-strong bg-white px-3.5 text-sm transition outline-none placeholder:text-muted/70 hover:border-brand-200 focus:border-brand-500 focus:ring-4 focus:ring-brand-100;
+}
+@utility label {
+	@apply mb-1.5 block text-[13px] font-semibold text-ink;
+}
+@utility th {
+	@apply bg-ground/70 px-5 py-3 text-left text-[11px] font-semibold tracking-wider whitespace-nowrap text-muted uppercase;
+}
+@utility td {
+	@apply border-t border-line px-5 py-3.5 text-sm whitespace-nowrap;
+}
+@utility num {
+	font-variant-numeric: tabular-nums;
+}
+@utility eyebrow {
+	@apply text-[11px] font-semibold tracking-wider text-muted uppercase;
+}
+@utility dots-bg {
+	background-image: radial-gradient(rgb(255 255 255 / 0.09) 1px, transparent 1px);
+	background-size: 18px 18px;
+}
+@utility scroll-tipis {
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-line-strong) transparent;
+}
+/* Grid kartu: kolom ditambah hanya jika tiap kartu tetap >= 18rem */
+@utility grid-kartu {
+	@apply grid gap-4;
+	grid-template-columns: repeat(auto-fill, minmax(min(18rem, 100%), 1fr));
+}
+
+/* StatCard: angka selalu satu baris dan ukurannya mengikuti lebar kartu */
+.stat-kartu {
+	container-type: inline-size;
+	min-width: 0;
+	overflow: hidden;
+}
+.stat-kartu > div:first-child {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	align-items: start;
+}
+.stat-kartu > div:first-child > span:first-child {
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+.stat-kartu .text-3xl {
+	white-space: nowrap;
+	font-size: clamp(0.95rem, 9cqi, 1.75rem);
+	line-height: 1.2;
+}
+.stat-kartu > span:last-child {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* Khwarizmi UI Tabs: kontras & tinggi.
+   CSS ini sengaja di luar @layer supaya menang atas kelas bawaan komponen. */
+[role='tablist'] > [role='tab'] {
+	border-width: 1px !important;
+	padding-block: 0.5rem; /* tinggi tab jadi 48px, sama dengan input & tombol */
+}
+[role='tablist'] > [role='tab'][aria-selected='false'] {
+	color: var(--color-slate-600); /* sebelumnya slate-400: kontras ±2,5:1 */
+}
+[role='tablist'] > [role='tab'][aria-selected='false']:hover {
+	color: var(--color-slate-800);
+}
+[role='tablist'] > [role='tab'][aria-selected='true'] > span {
+	background-color: rgb(255 255 255 / 0.22); /* angka di tab aktif lebih terlihat */
+}
+[role='tablist'] > [role='tab'][aria-selected='true'] {
+	border-color: var(--primary-shade);
+	background-color: var(--primary);
+	color: white;
+	box-shadow:
+		inset 0 3px 4px -1px #ffffffe6,
+		inset 0 -2px 2px -1px var(--primary-shade),
+		0 3px 0 0 var(--color-brand-800);
+	transition:
+		background-color 420ms cubic-bezier(0.16, 1, 0.3, 1),
+		color 420ms cubic-bezier(0.16, 1, 0.3, 1),
+		border-color 420ms cubic-bezier(0.16, 1, 0.3, 1),
+		box-shadow 420ms cubic-bezier(0.16, 1, 0.3, 1),
+		transform 420ms cubic-bezier(0.16, 1, 0.3, 1),
+		opacity 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+	[role='tablist'] > [role='tab'][aria-selected='true'] {
+		transition: none;
+	}
+}

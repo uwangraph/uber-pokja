@@ -1,0 +1,9 @@
+name = "uber-pokja-tenjolaya"
+account_id = "1ef2e18dc9de53cb201f3ca19b77bebb"
+workers_dev = true
+compatibility_date = "2026-09-25"
+main = ".svelte-kit/cloudflare/_worker.js"
+
+[assets]
+directory = ".svelte-kit/cloudflare"
+binding = "ASSETS"
