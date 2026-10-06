@@ -1,0 +1,107 @@
+[
+	{
+		"idMajelis": 9,
+		"nama": "AL FATAH",
+		"kelurahan": "TENJOLAYA",
+		"status": "kosong"
+	},
+	{
+		"idMajelis": 14,
+		"nama": "AL IKLAS",
+		"kelurahan": "Situdaun",
+		"status": "anomali",
+		"latAsli": 0.3515602939922,
+		"lngAsli": 121.2890625,
+		"jarakKmDariTenjolaya": 1795.3
+	},
+	{
+		"idMajelis": 15,
+		"nama": "AL ISTIQOMAH",
+		"kelurahan": "TENJOLAYA",
+		"status": "kosong"
+	},
+	{
+		"idMajelis": 16,
+		"nama": "AL ISTIQOMAH",
+		"kelurahan": "TENJOLAYA",
+		"status": "kosong"
+	},
+	{
+		"idMajelis": 18,
+		"nama": "AL-DJUFRI RAHMAN",
+		"kelurahan": "TENJOLAYA",
+		"status": "kosong"
+	},
+	{
+		"idMajelis": 20,
+		"nama": "AL-IKHLAS",
+		"kelurahan": "TENJOLAYA",
+		"status": "kosong"
+	},
+	{
+		"idMajelis": 23,
+		"nama": "ALZAMI BANI AHMAD",
+		"kelurahan": "TENJOLAYA",
+		"status": "kosong"
+	},
+	{
+		"idMajelis": 26,
+		"nama": "AR RAHMAN",
+		"kelurahan": "TENJOLAYA",
+		"status": "kosong"
+	},
+	{
+		"idMajelis": 38,
+		"nama": "DARUSSALAM",
+		"kelurahan": "Tapos II",
+		"status": "anomali",
+		"latAsli": -4.559345094008,
+		"lngAsli": 121.39270932884,
+		"jarakKmDariTenjolaya": 1642.1
+	},
+	{
+		"idMajelis": 39,
+		"nama": "FATAHILAH",
+		"kelurahan": "TENJOLAYA",
+		"status": "kosong"
+	},
+	{
+		"idMajelis": 41,
+		"nama": "HUSNUL MAAB",
+		"kelurahan": "TENJOLAYA",
+		"status": "kosong"
+	},
+	{
+		"idMajelis": 42,
+		"nama": "HUSNUL MAAB",
+		"kelurahan": "TENJOLAYA",
+		"status": "kosong"
+	},
+	{
+		"idMajelis": 44,
+		"nama": "KHOERUL UMMAH",
+		"kelurahan": "TENJOLAYA",
+		"status": "kosong"
+	},
+	{
+		"idMajelis": 45,
+		"nama": "MIFTAHUDDIN",
+		"kelurahan": "TENJOLAYA",
+		"status": "kosong"
+	},
+	{
+		"idMajelis": 56,
+		"nama": "NURUL FALAH",
+		"kelurahan": "TENJOLAYA",
+		"status": "kosong"
+	},
+	{
+		"idMajelis": 66,
+		"nama": "NURUL IMAN",
+		"kelurahan": "Gunung Mulya",
+		"status": "anomali",
+		"latAsli": -6.31529853833,
+		"lngAsli": 107.841796875,
+		"jarakKmDariTenjolaya": 130.9
+	}
+]
