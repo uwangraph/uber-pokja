@@ -12,7 +12,7 @@ Sumber: `hakAkses` dan `izin` di [src/lib/data.js](../src/lib/data.js).
 | Pemasaran | Dashboard, Penjualan, Majelis, Laporan | Penjualan, Majelis: kelola · Dashboard: lihat · Laporan: penjualan |
 | MT | Toko Saya | Toko: kelola (saat ini hanya bisa melihat, belum ada aksi) |
 
-Pembeli umum tidak perlu login dan hanya memakai halaman `/marketplace`.
+Pembeli umum hanya memakai halaman `/marketplace`. Melihat katalog tidak perlu login, tetapi untuk memesan pembeli harus login dulu agar data pribadinya (nama, kontak, alamat) terisi.
 
 ## Catatan
 

@@ -7,6 +7,7 @@
 	import { majelis } from '$lib/data.js';
 	import { tokoState, tokoAktif, katalogToko } from '$lib/marketplace.svelte.js';
 	import { kurangiStokMT } from '$lib/inventori.svelte.js';
+	import { sudahMasukPembeli, urlMasuk } from '$lib/pembeli.js';
 
 	// Tanpa toko dipilih, tampilkan gabungan stok semua MT (bisa disaring manual
 	// lewat /marketplace/toko kalau mau belanja dari satu toko saja).
@@ -107,6 +108,11 @@
 	function checkout() {
 		if (!barisDipilih.length) {
 			showToast({ tone: 'warning', title: 'Pilih produk terlebih dahulu', description: 'Centang produk yang ingin dipesan.' });
+			return;
+		}
+		if (!sudahMasukPembeli()) {
+			showToast({ tone: 'info', title: 'Masuk dulu untuk memesan', description: 'Lengkapi data pribadi Anda sebelum membuat pesanan.' });
+			goto(urlMasuk('/marketplace'));
 			return;
 		}
 		if (!pembeli.nama.trim() || !pembeli.hp.trim() || !pembeli.alamat.trim()) {

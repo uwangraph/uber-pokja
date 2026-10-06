@@ -7,6 +7,7 @@
 	import { majelis } from '$lib/data.js';
 	import { tokoState, tokoAktif, katalogToko } from '$lib/marketplace.svelte.js';
 	import { kurangiStokMT } from '$lib/inventori.svelte.js';
+	import { sudahMasukPembeli, urlMasuk } from '$lib/pembeli.js';
 
 	const produk = $derived(katalogToko(tokoState.majelisId));
 	const toko = $derived(tokoAktif());
@@ -22,6 +23,7 @@
 	const visual = { 1: '🍚', 2: '🫙', 3: '🧂', 4: '🥚', 5: '🌾', 6: '🍜', 7: '🍵' };
 
 	onMount(() => {
+		if (!sudahMasukPembeli()) { goto(urlMasuk('/marketplace/checkout'), { replaceState: true }); return; }
 		try {
 			keranjang = JSON.parse(localStorage.getItem('uber-pokja:marketplace:cart') ?? '{}');
 			dipilih = JSON.parse(localStorage.getItem('uber-pokja:marketplace:selected') ?? '{}');

@@ -30,7 +30,7 @@ Aplikasi berbasis web untuk membantu mengelola operasional **UBER (Usaha Bersama
 * **Keuangan** — mengelola transaksi keuangan.
 * **Pengadaan/Gudang** — mengelola supplier, pembelian, dan stok.
 * **Pemasaran** — mengelola Majelis Taklim dan penjualan.
-* **Pembeli umum** — melihat katalog sembako dan mengirim pesanan tanpa perlu login.
+* **Pembeli umum** — melihat katalog sembako tanpa login, dan login terlebih dahulu saat memesan untuk melengkapi data pribadi.
 
 ---
 
