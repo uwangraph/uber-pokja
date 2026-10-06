@@ -15,7 +15,6 @@ Aplikasi web untuk mengelola operasional **UBER (Usaha Bersama) POKJA Majelis Ta
 | [PRD.md](PRD.md) | Kebutuhan produk: tujuan, pengguna, fitur, alur, MVP, prinsip UI/UX |
 | [uber-pokja.md](uber-pokja.md) | Timeline program Usaha Bersama, dari pembentukan sampai launching penjualan perdana |
 | [hak-akses.md](hak-akses.md) | Menu dan izin tiap peran |
-| [deploy.md](deploy.md) | Cara deploy ke Cloudflare Pages |
 
 ---
 
@@ -29,7 +28,7 @@ Aplikasi web untuk mengelola operasional **UBER (Usaha Bersama) POKJA Majelis Ta
 | Gudang | Produk, pembelian, dan stok |
 | Pemasaran | Majelis Taklim dan penjualan |
 | MT | Toko/outlet: melihat stok titipan, pesanan, dan penjualan tokonya sendiri |
-| Pembeli umum | Belanja lewat marketplace tanpa login |
+| Pembeli umum | Melihat katalog marketplace tanpa login; login diperlukan saat memesan untuk melengkapi data pribadi |
 
 Rincian menu dan izin ada di [hak-akses.md](hak-akses.md).
 
@@ -49,7 +48,7 @@ Rincian menu dan izin ada di [hak-akses.md](hak-akses.md).
 **Marketplace publik** (`/marketplace`)
 
 - Pencarian toko terdekat, katalog per toko
-- Keranjang, checkout, pembayaran, alamat
+- Keranjang, masuk & lengkapi data pribadi (wajib saat memesan), checkout, pembayaran, alamat
 - Pesanan, chat, notifikasi, dan profil pembeli
 
 ## Teknologi
@@ -69,7 +68,7 @@ src/
 ├── routes/
 │   ├── (app)/          Halaman internal (dashboard, produk, stok, dst.)
 │   ├── marketplace/    Marketplace publik
-│   ├── login/          Pilih akun contoh
+│   ├── login/          Pilih akun contoh (internal)
 │   └── preview/        Daftar tautan semua halaman
 └── lib/
     ├── data.js         Akun contoh, hak akses, data awal
