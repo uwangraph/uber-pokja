@@ -212,8 +212,11 @@
 				</span>
 			</a>
 			<div class="flex shrink-0 items-center gap-1.5 sm:gap-2">
-				<a href="/marketplace/toko" class="header-action hidden sm:inline-flex"><Store size={16} /> {toko ? toko.nama : 'Semua toko'}</a>
-				<a href="/marketplace/pesanan" class="header-action hidden sm:inline-flex"><ClipboardList size={16} /> <span class="hidden md:inline">Pesanan saya</span></a>
+				<!-- HP/tablet: menu lain ada di bottom nav; desktop: semua menu di header. -->
+				<a href="/marketplace/toko" class="header-action inline-flex" aria-label="Pilih toko"><Store size={16} /> <span class="hidden max-w-40 truncate sm:inline">{toko ? toko.nama : 'Semua toko'}</span></a>
+				<a href="/marketplace/pesanan" class="header-action hidden lg:inline-flex"><ClipboardList size={16} /> Pesanan saya</a>
+				<a href="/marketplace/notifikasi" class="header-action relative hidden lg:inline-flex" aria-label="Notifikasi"><Bell size={16} /><b class="num absolute -top-1 -right-1 grid size-4 place-items-center rounded-full bg-gold-400 text-[9px] text-brand-900">2</b></a>
+				<a href="/marketplace/profil" class="header-action hidden lg:inline-flex" aria-label="Profil"><UserRound size={16} /></a>
 				<a href="/login" class="header-action hidden xl:inline-flex"><UserRound size={16} /> Masuk pengelola</a>
 				<Button variant="success" size="sm" class="!bg-none !bg-brand-700 !text-white !shadow-[0_3px_0_0_#072e1f] hover:!translate-y-px hover:!shadow-[0_2px_0_0_#072e1f] active:!translate-y-0.5 active:!shadow-[0_1px_0_0_#072e1f]" onclick={() => goto('/marketplace/keranjang')} aria-label="Buka keranjang">
 					<ShoppingBag size={17} strokeWidth={2.5} />
