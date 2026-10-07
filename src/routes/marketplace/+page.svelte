@@ -28,7 +28,6 @@
 	let chatOpen = $state(false);
 	let pesanBaru = $state('');
 	let chat = $state([{ dari: 'admin', isi: 'Assalamu’alaikum, ada yang bisa kami bantu?' }]);
-	let navAktif = $state('beranda');
 	let pembeli = $state({ nama: '', hp: '', alamat: '' });
 	let pengiriman = $state('antar');
 	let pembayaran = $state('transfer');
@@ -94,10 +93,6 @@
 		ubah(p, 1);
 		dipilih[p.id] = true;
 		showToast({ tone: 'success', title: 'Ditambahkan ke keranjang', description: `${p.nama} · ${keranjang[p.id]} ${p.satuan}` });
-	}
-	function keBagian(id, nav) {
-		navAktif = nav;
-		document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 	}
 	function kirimPesan() {
 		const isi = pesanBaru.trim();
@@ -193,6 +188,7 @@
 		localStorage.setItem(STORAGE.buyer, JSON.stringify(pembeli));
 		localStorage.setItem(STORAGE.selected, JSON.stringify(dipilih));
 		localStorage.setItem(STORAGE.orders, JSON.stringify(pesanan));
+		window.dispatchEvent(new Event('keranjang-berubah'));
 	});
 </script>
 
@@ -201,31 +197,7 @@
 	<meta name="description" content="Belanja produk UBER POKJA Majelis Taklim Tenjolaya." />
 </svelte:head>
 
-<div class="marketplace min-h-dvh pb-24 text-ink lg:pb-0">
-	<header class="sticky top-0 z-30 border-b border-brand-900/10 bg-[#fffdf8]/95 backdrop-blur-xl">
-		<div class="mx-auto flex h-17 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
-			<a href="/marketplace" class="flex items-center gap-2.5">
-				<span class="grid size-11 place-items-center rounded-2xl bg-white shadow-sm ring-1 ring-brand-900/10"><img src="/logo.png" alt="UBER POKJA" class="size-8" /></span>
-				<span class="leading-tight">
-					<span class="block text-sm font-black tracking-tight text-brand-900">UBER Market</span>
-					<span class="block text-[11px] font-bold text-slate-500">Marketplace UBER POKJA</span>
-				</span>
-			</a>
-			<div class="flex shrink-0 items-center gap-1.5 sm:gap-2">
-				<!-- HP/tablet: menu lain ada di bottom nav; desktop: semua menu di header. -->
-				<a href="/marketplace/toko" class="header-action inline-flex" aria-label="Pilih toko"><Store size={16} /> <span class="hidden max-w-40 truncate sm:inline">{toko ? toko.nama : 'Semua toko'}</span></a>
-				<a href="/marketplace/pesanan" class="header-action hidden lg:inline-flex"><ClipboardList size={16} /> Pesanan saya</a>
-				<a href="/marketplace/notifikasi" class="header-action relative hidden lg:inline-flex" aria-label="Notifikasi"><Bell size={16} /><b class="num absolute -top-1 -right-1 grid size-4 place-items-center rounded-full bg-gold-400 text-[9px] text-brand-900">2</b></a>
-				<a href="/marketplace/profil" class="header-action hidden lg:inline-flex" aria-label="Profil"><UserRound size={16} /></a>
-				<a href="/login" class="header-action hidden xl:inline-flex"><UserRound size={16} /> Masuk pengelola</a>
-				<Button variant="success" size="sm" class="!bg-none !bg-brand-700 !text-white !shadow-[0_3px_0_0_#072e1f] hover:!translate-y-px hover:!shadow-[0_2px_0_0_#072e1f] active:!translate-y-0.5 active:!shadow-[0_1px_0_0_#072e1f]" onclick={() => goto('/marketplace/keranjang')} aria-label="Buka keranjang">
-					<ShoppingBag size={17} strokeWidth={2.5} />
-					<span class="hidden min-[380px]:inline">Keranjang</span>
-					{#if jumlah}<span class="num grid size-5 place-items-center rounded-full bg-white text-[11px] font-black text-primary-700">{jumlah}</span>{/if}
-				</Button>
-			</div>
-		</div>
-	</header>
+<div class="marketplace min-h-dvh text-ink">
 
 	<main>
 		<section class="px-4 pt-5 sm:px-6 sm:pt-7">
@@ -320,16 +292,6 @@
 		</section>
 	</main>
 
-	<!-- Navigasi cepat untuk marketplace di HP dan tablet. -->
-	<nav class="fixed inset-x-0 bottom-0 z-40 border-t border-brand-900/10 bg-white/95 px-2 pb-[env(safe-area-inset-bottom)] pt-1.5 shadow-[0_-8px_24px_-18px_rgb(7_46_31_/_0.42)] backdrop-blur-xl lg:hidden" aria-label="Navigasi marketplace">
-		<div class="mx-auto grid max-w-2xl grid-cols-4">
-			<button class="market-nav" class:aktif={navAktif === 'beranda'} onclick={() => keBagian('market-beranda', 'beranda')}><Home size={20} strokeWidth={2.5} /><span>Beranda</span></button>
-			<a href="/marketplace/notifikasi" class="market-nav relative"><Bell size={20} strokeWidth={2.5} /><b class="num absolute top-0 right-[calc(50%-1.5rem)] grid size-4 place-items-center rounded-full bg-gold-400 text-[9px] text-brand-900">2</b><span>Notifikasi</span></a>
-			<a href="/marketplace/pesanan" class="market-nav"><ClipboardList size={20} strokeWidth={2.5} /><span>Pesanan</span></a>
-			<a href="/marketplace/profil" class="market-nav"><UserRound size={20} strokeWidth={2.5} /><span>Profil</span></a>
-		</div>
-	</nav>
-	<a href="/marketplace/chat" class="chat-float fixed right-3 bottom-22 z-40 grid size-10 place-items-center rounded-full bg-primary-700 text-white transition hover:translate-y-px lg:right-6 lg:bottom-6" aria-label="Buka chat bantuan" title="Chat bantuan"><MessageCircle size={18} strokeWidth={2.5} /></a>
 
 	<Modal bind:open={cartOpen} title="Keranjang belanja" description={baris.length ? jumlahDipilih + ' item dipilih dari ' + jumlah + ' item di keranjang' : 'Keranjang Anda masih kosong.'} size="lg">
 		<div class="cart-body">
