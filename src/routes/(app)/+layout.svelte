@@ -58,7 +58,7 @@
 	// Pengaman URL langsung: menu yang tidak berhak dibuka tidak cukup hanya
 	// disembunyikan dari sidebar.
 	$effect(() => {
-		if (user && page.url.pathname !== '/notifikasi' && !hakAkses[user.role]?.some((href) => page.url.pathname.startsWith(href))) {
+		if (user && !['/notifikasi', '/profil'].includes(page.url.pathname) && !hakAkses[user.role]?.some((href) => page.url.pathname.startsWith(href))) {
 			goto('/login', { replaceState: true });
 		}
 	});
@@ -81,7 +81,7 @@
 			.filter(Boolean)
 			.slice(0, 4)
 	);
-	const judul = $derived(nav.find((n) => active(n.href))?.label ?? (active('/notifikasi') ? 'Notifikasi' : ''));
+	const judul = $derived(nav.find((n) => active(n.href))?.label ?? (active('/notifikasi') ? 'Notifikasi' : active('/profil') ? 'Profil' : ''));
 	const hariIni = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
 	// Tutup panel saat pindah halaman
@@ -132,16 +132,18 @@
 		<div class="border-t border-line p-3">
 			{#if ciut}
 				<div class="flex flex-col items-center gap-2">
-					<Tooltip text="{user?.nama ?? ''} · {labelRole(user?.role)}" side="right"><Avatar name={user?.nama ?? ''} size="sm" /></Tooltip>
+					<Tooltip text="{user?.nama ?? ''} · {labelRole(user?.role)}" side="right"><a href="/profil" aria-label="Profil saya"><Avatar name={user?.nama ?? ''} size="sm" /></a></Tooltip>
 					<Button variant="ghost" size="icon-sm" aria-label="Keluar" title="Keluar" onclick={keluar}><Icon name="logout" class="size-4" /></Button>
 				</div>
 			{:else}
 				<div class="flex items-center gap-3 rounded-2xl bg-ground/70 p-2.5">
-					<Avatar name={user?.nama ?? ''} size="md" />
-					<div class="min-w-0 flex-1 leading-tight">
-						<p class="truncate text-sm font-black">{user?.nama ?? ''}</p>
-						<p class="text-xs font-bold text-muted">{labelRole(user?.role)}</p>
-					</div>
+					<a href="/profil" class="flex min-w-0 flex-1 items-center gap-3" aria-label="Profil saya">
+						<Avatar name={user?.nama ?? ''} size="md" />
+						<div class="min-w-0 flex-1 leading-tight">
+							<p class="truncate text-sm font-black">{user?.nama ?? ''}</p>
+							<p class="text-xs font-bold text-muted">{labelRole(user?.role)}</p>
+						</div>
+					</a>
 					<Button variant="ghost" size="icon-sm" aria-label="Keluar" title="Keluar" onclick={keluar}><Icon name="logout" class="size-4" /></Button>
 				</div>
 			{/if}
@@ -179,9 +181,9 @@
 					</Button>
 					{@render bellBadge()}
 				</div>
-				<button class="rounded-full" aria-label="Buka menu" onclick={() => (menuOpen = true)}>
+				<a href="/profil" class="rounded-full" aria-label="Profil saya">
 					<Avatar name={user?.nama ?? ''} size="sm" />
-				</button>
+				</a>
 			</div>
 		</header>
 
