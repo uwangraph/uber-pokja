@@ -22,23 +22,3 @@
 		<div class="toolbar-filter min-w-0 xl:order-2">{@render filters()}</div>
 	{/if}
 </div>
-
-<style>
-	.toolbar :global(input[type='search']) {
-		padding-block: 13px;
-	}
-	/* Di bawah xl filter punya baris sendiri: lebarkan penuh, tiap pilihan sama lebar */
-	@media (width < 80rem) {
-		.toolbar-filter :global([role='tablist']) {
-			width: 100%;
-		}
-		.toolbar-filter :global([role='tab']) {
-			flex: 1 0 auto;
-		}
-	}
-	.toolbar-aksi :global(button) {
-		height: 3rem;
-		padding-block: 0;
-		white-space: nowrap;
-	}
-</style>

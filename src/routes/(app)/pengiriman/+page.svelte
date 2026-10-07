@@ -201,7 +201,7 @@
 
 	{#if fotoBukti}
 		<img src={fotoBukti} alt="Pratinjau bukti serah-terima" class="h-72 w-full rounded-2xl object-cover" />
-		<button type="button" class="mt-3 flex items-center gap-2 text-sm font-black text-primary-700" onclick={ulangiFoto}><RefreshCw size={16} /> Ambil ulang foto</button>
+		<Button variant="link" class="mt-3" onclick={ulangiFoto}><RefreshCw size={16} /> Ambil ulang foto</Button>
 	{:else}
 		<div class="relative overflow-hidden rounded-2xl border border-dashed border-primary-300 bg-slate-900">
 			{#if kameraError}

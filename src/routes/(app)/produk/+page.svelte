@@ -171,7 +171,7 @@
 {/snippet}
 
 <!-- Tabel -->
-<div class="tabel-rapi hidden md:block">
+<div class="hidden md:block">
 	<Table columns={kolom} rows={list} cell={sel} emptyText="Tidak ada produk yang cocok." />
 </div>
 
@@ -232,10 +232,3 @@
 		</div>
 	{/snippet}
 </Modal>
-
-<style>
-	/* Judul kolom tabel tidak terlipat (mis. "HARGA BELI") */
-	.tabel-rapi :global(th) {
-		white-space: nowrap;
-	}
-</style>

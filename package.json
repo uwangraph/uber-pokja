@@ -7,7 +7,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-		"deploy": "CLOUDFLARE_ACCOUNT_ID=cdcd2c8177520b10e161f95fb0e12220 vite build && wrangler pages deploy"
+    "deploy": "CLOUDFLARE_ACCOUNT_ID=cdcd2c8177520b10e161f95fb0e12220 vite build && wrangler pages deploy"
   },
   "devDependencies": {
     "@sveltejs/adapter-cloudflare": "^7.2.9",
