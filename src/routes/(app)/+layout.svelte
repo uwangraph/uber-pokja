@@ -178,7 +178,7 @@
 			</a>
 			<div class="flex items-center gap-1.5">
 				<div class="relative">
-					<Button variant="ghost" size="icon" aria-label="Notifikasi{baru ? `, ${baru} baru` : ''}" onclick={() => (notifOpen = true)}>
+					<Button variant="ghost" size="icon" onclick={() => goto("/notifikasi")} aria-label="Notifikasi{baru ? `, ${baru} baru` : ''}">
 						<Icon name="bell" class="size-5" />
 					</Button>
 					{@render bellBadge()}
