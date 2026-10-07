@@ -209,14 +209,24 @@
 		{/snippet}
 	</Drawer>
 
-	<!-- Menu lengkap HP -->
-	<Drawer bind:open={menuOpen} title="Menu" description={user ? `${user.nama} · ${labelRole(user.role)}` : ''} side="bottom" size="full">
-		<div class="sidebar-khw -mx-2">
-			<Sidebar {groups} active={activeHref} variant="minimal" />
+	<!-- Menu lengkap HP: grid ikon, setinggi isinya -->
+	<Drawer bind:open={menuOpen} title="Menu" side="bottom" size="full">
+		<a href="/profil" onclick={() => (menuOpen = false)} class="flex items-center gap-3 rounded-2xl bg-ground/70 p-3">
+			<Avatar name={user?.nama ?? ''} size="md" />
+			<div class="min-w-0 flex-1 leading-tight">
+				<p class="truncate text-sm font-black">{user?.nama ?? ''}</p>
+				<p class="text-xs font-bold text-muted">{labelRole(user?.role)} · Lihat profil</p>
+			</div>
+			<Icon name="chevron" class="size-4 text-slate-400" />
+		</a>
+		<div class="mt-4 grid grid-cols-3 gap-2 pb-2">
+			{#each visibleNav as item}
+				<a href={item.href} onclick={() => (menuOpen = false)} class="flex flex-col items-center gap-2 rounded-2xl p-3 text-center text-xs font-black {active(item.href) ? 'bg-brand-50 text-brand-700' : 'text-slate-600 active:bg-slate-50'}">
+					<span class="grid size-12 place-items-center rounded-2xl {active(item.href) ? 'bg-white' : 'bg-slate-50'}"><Icon name={item.icon} class="size-5" strokeWidth={2.5} /></span>
+					{item.labelPendek ?? item.label}
+				</a>
+			{/each}
 		</div>
-		{#snippet footer()}
-			<Button variant="outline" fullWidth onclick={keluar}><Icon name="logout" class="size-4" /> Keluar</Button>
-		{/snippet}
 	</Drawer>
 
 	<!-- Bottom nav HP -->
@@ -251,22 +261,6 @@
 	/* Beri jarak antar kelompok menu */
 	.sidebar-khw :global(nav > p:not(:first-child)) {
 		margin-top: 0.875rem;
-	}
-	/* Menu HP memakai hampir seluruh tinggi layar dan baris yang lebih padat,
-	   sehingga daftar tidak tampak terpotong di tengah. */
-	@media (max-width: 1023px) {
-		:global([role='dialog'][aria-label='Menu']) {
-			height: calc(100svh - 1rem);
-			max-height: calc(100svh - 1rem);
-		}
-		.sidebar-khw :global(nav > a),
-		.sidebar-khw :global(nav > button) {
-			padding-top: 0.5rem;
-			padding-bottom: 0.5rem;
-		}
-		.sidebar-khw :global(nav > p:not(:first-child)) {
-			margin-top: 0.625rem;
-		}
 	}
 	/* SearchInput di bar atas dibuat lebih pendek agar muat di tinggi navbar */
 	.topbar-cari :global(input) {
