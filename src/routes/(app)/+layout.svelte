@@ -74,6 +74,8 @@
 			}, {})
 		).map(([label, items]) => ({ label, items }))
 	);
+	// Tombol Menu hanya perlu kalau ada menu yang tidak muat di bottom bar.
+	const adaMenuLain = $derived(visibleNav.length > bottomNav.length);
 	const activeHref = $derived(visibleNav.find((n) => active(n.href))?.href ?? '');
 	const bottomNav = $derived(
 		navMobile
@@ -231,7 +233,7 @@
 
 	<!-- Bottom nav HP -->
 	<nav class="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md lg:hidden" aria-label="Menu cepat">
-		<div class="grid" style="grid-template-columns: repeat({bottomNav.length + 1}, minmax(0, 1fr))">
+		<div class="grid" style="grid-template-columns: repeat({bottomNav.length + (adaMenuLain ? 1 : 0)}, minmax(0, 1fr))">
 			{#each bottomNav as item}
 				<a href={item.href} class="flex min-h-16 flex-col items-center justify-center gap-1 text-[11px] font-black {active(item.href) ? 'text-brand-700' : 'text-slate-400'}">
 					<span class="grid h-7 w-12 place-items-center rounded-full transition {active(item.href) ? 'bg-brand-50' : ''}">
@@ -240,10 +242,12 @@
 					{item.labelPendek ?? item.label}
 				</a>
 			{/each}
+			{#if adaMenuLain}
 			<button class="flex min-h-16 flex-col items-center justify-center gap-1 text-[11px] font-black text-slate-400" onclick={() => (menuOpen = true)}>
 				<span class="grid h-7 w-12 place-items-center rounded-full"><Icon name="menu" class="size-5" strokeWidth={2.5} /></span>
 				Menu
 			</button>
+			{/if}
 		</div>
 	</nav>
 </div>
