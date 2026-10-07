@@ -27,8 +27,7 @@
 			ciut = localStorage.getItem('sidebar') === 'ciut';
 		} catch {}
 	});
-	function toggleSidebar() {
-		ciut = !ciut;
+	function simpanCiut(ciut) {
 		try {
 			localStorage.setItem('sidebar', ciut ? 'ciut' : 'lebar');
 		} catch {}
@@ -105,16 +104,6 @@
 <div class="min-h-dvh lg:flex">
 	<!-- Sidebar desktop -->
 	<aside class="sticky top-0 z-30 hidden h-dvh shrink-0 flex-col border-r border-line bg-white transition-[width] duration-200 lg:flex {ciut ? 'w-16' : 'w-64'}">
-		<!-- Tombol ciut: di pertemuan garis tepi sidebar dan garis bawah navbar -->
-		<button
-			class="absolute top-16 -right-3 z-10 grid size-6 -translate-y-1/2 place-items-center rounded-full border border-line-strong bg-white text-muted shadow-card transition hover:border-brand-500 hover:text-brand-700 focus-visible:ring-4 focus-visible:ring-brand-100 focus-visible:outline-none"
-			aria-label={ciut ? 'Lebarkan sidebar' : 'Ciutkan sidebar'}
-			title={ciut ? 'Lebarkan sidebar' : 'Ciutkan sidebar'}
-			aria-expanded={!ciut}
-			onclick={toggleSidebar}
-		>
-			<Icon name="chevron" class="size-3.5 transition-transform {ciut ? '' : 'rotate-180'}" strokeWidth={2.5} />
-		</button>
 
 		<a href="/" class="flex h-16 shrink-0 items-center gap-3 {ciut ? 'justify-center' : 'px-5'}" title={ciut ? 'UBER POKJA' : undefined}>
 			<img src="/logo.png" alt={ciut ? 'UBER POKJA' : ''} class="size-9" />
@@ -126,9 +115,9 @@
 			{/if}
 		</a>
 
-		<!-- Menu: komponen Sidebar (tombol ciut bawaannya disembunyikan, diganti tombol di garis tepi) -->
-		<div class="sidebar-khw scroll-tipis min-h-0 flex-1 overflow-y-auto">
-			<Sidebar {groups} active={activeHref} variant="minimal" collapsible collapsed={ciut} />
+		<!-- Menu: komponen Sidebar dengan tombol ciut bawaannya -->
+		<div class="scroll-tipis min-h-0 flex-1 overflow-y-auto">
+			<Sidebar {groups} active={activeHref} variant="minimal" collapsible bind:collapsed={ciut} onCollapsedChange={simpanCiut} />
 		</div>
 
 		<div class="border-t border-line p-3">
@@ -156,7 +145,7 @@
 		<!-- Top bar desktop -->
 		<header class="sticky top-0 z-20 hidden h-16 items-center gap-4 border-b border-line bg-ground/80 px-8 backdrop-blur-md lg:flex">
 			<Breadcrumb items={[{ label: 'UBER POKJA', href: '/' }, { label: judul }]} />
-			<div class="topbar-cari ml-auto w-72">
+			<div class="ml-auto w-72">
 				<SearchInput id="cari-global" bind:value={cari} placeholder="Cari produk, transaksi, MT…" aria-label="Cari" />
 			</div>
 			<span class="hidden items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm font-bold text-muted xl:flex">
@@ -251,24 +240,3 @@
 		</div>
 	</nav>
 </div>
-
-<style>
-	/* Sidebar Khwarizmi UI mengisi penuh kolomnya; tombol ciut bawaannya disembunyikan */
-	.sidebar-khw :global(aside) {
-		width: 100%;
-		overflow: visible;
-		border-radius: 0;
-	}
-	.sidebar-khw :global(aside > button:first-child) {
-		display: none;
-	}
-	/* Beri jarak antar kelompok menu */
-	.sidebar-khw :global(nav > p:not(:first-child)) {
-		margin-top: 0.875rem;
-	}
-	/* SearchInput di bar atas dibuat lebih pendek agar muat di tinggi navbar */
-	.topbar-cari :global(input) {
-		padding-top: 0.625rem;
-		padding-bottom: 0.625rem;
-	}
-</style>

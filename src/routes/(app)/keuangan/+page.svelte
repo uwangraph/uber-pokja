@@ -91,7 +91,7 @@
 			<ToggleGroup
 				bind:value={jenis}
 				size="sm"
-				class="toggle-penuh w-full"
+				class="w-full"
 				items={[
 					{ value: 'masuk', label: 'Pemasukan' },
 					{ value: 'keluar', label: 'Pengeluaran' },
@@ -150,16 +150,3 @@
 		{/if}
 	</Card>
 </div>
-
-<style>
-	/* ToggleGroup satu baris penuh: tiap pilihan sama lebar, tidak turun baris */
-	:global(.toggle-penuh) {
-		flex-wrap: nowrap;
-	}
-	:global(.toggle-penuh > button) {
-		flex: 1 1 0;
-		min-width: 0;
-		padding-inline: 0.5rem;
-		white-space: nowrap;
-	}
-</style>

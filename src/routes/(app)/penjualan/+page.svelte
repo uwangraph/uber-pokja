@@ -250,7 +250,7 @@
 				{#if !pemasaran}<ToggleGroup
 					bind:value={status}
 					size="sm"
-				class="toggle-penuh w-full"
+				class="w-full"
 					items={[
 						{ value: 'Lunas', label: 'Lunas' },
 						{ value: 'Belum bayar', label: 'Belum bayar' }
@@ -340,16 +340,3 @@
 		</ul>
 	</Card>
 {/if}
-
-<style>
-	/* ToggleGroup satu baris penuh: tiap pilihan sama lebar, tidak turun baris */
-	:global(.toggle-penuh) {
-		flex-wrap: nowrap;
-	}
-	:global(.toggle-penuh > button) {
-		flex: 1 1 0;
-		min-width: 0;
-		padding-inline: 0.5rem;
-		white-space: nowrap;
-	}
-</style>

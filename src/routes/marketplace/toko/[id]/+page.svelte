@@ -64,7 +64,7 @@
 						<p class="mt-1 flex items-center gap-1.5 text-sm font-medium text-primary-100"><MapPin size={14} /> Desa {toko.desa}</p>
 						<p class="mt-1 flex items-center gap-1.5 text-sm font-medium text-primary-100"><Phone size={14} /> {toko.hp}</p>
 					</div>
-					<Button variant="warning" class="!bg-none !bg-gold-400 !text-brand-900 shrink-0" onclick={belanjaDariToko}><ShoppingBag size={16} /> Belanja dari toko ini</Button>
+					<Button variant="warning" class="shrink-0" onclick={belanjaDariToko}><ShoppingBag size={16} /> Belanja dari toko ini</Button>
 				</div>
 			</header>
 

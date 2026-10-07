@@ -84,11 +84,3 @@
 		</form>
 	</main>
 </div>
-
-<style>
-	/* Radio mengisi seluruh baris kartu supaya mudah diklik */
-	.akun-radio :global(label) {
-		width: 100%;
-		cursor: pointer;
-	}
-</style>

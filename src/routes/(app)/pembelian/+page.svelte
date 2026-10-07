@@ -133,7 +133,7 @@
 	</Toolbar>
 
 	{#if kelola}<Modal bind:open={formOpen} title="Pembelian baru" description="Stok bertambah otomatis saat barang ditandai diterima." size="lg">
-			<div class="modal-body-scroll">
+			<div class="max-h-[65svh] overflow-y-auto overscroll-contain pr-1">
 				<div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
 					<div class="col-span-2 sm:col-span-1"><Select label="Supplier" options={opsiSupplier} bind:value={sup} /></div>
 					<DatePicker label="Tanggal" bind:value={tgl} />
@@ -196,31 +196,3 @@
 		</ul>
 	</Card>
 </section>
-
-<style>
-	/* Form pembelian dapat lebih tinggi dari layar ponsel; gulir isi modal,
-	   bukan seluruh halaman, agar bagian atas dan aksi simpan tidak terpotong. */
-	@media (max-width: 639px) {
-		:global([role='dialog']) {
-			display: flex;
-			max-height: calc(100svh - 2rem);
-			flex-direction: column;
-		}
-
-		/* Wrapper bawaan Modal: beri sisa tinggi layar kepada konten, footer
-		   tetap utuh di bawah. */
-		:global([role='dialog'] > div:nth-child(2)) {
-			min-height: 0;
-			flex: 1 1 auto;
-			overflow: hidden;
-		}
-
-		.modal-body-scroll {
-			height: 100%;
-			max-height: none;
-			overflow-y: auto;
-			overscroll-behavior: contain;
-			padding-right: 0.25rem;
-		}
-	}
-</style>

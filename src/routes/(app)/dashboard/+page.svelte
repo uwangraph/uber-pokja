@@ -57,7 +57,7 @@
 				<span>Dari modal {rupiah(ringkasan.modal)}</span>
 				<span class="num font-black text-white">{persenModal}%</span>
 			</div>
-			<div class="progress-gelap">
+			<div>
 				<Progress value={persenModal} tone="amber" size="sm" label="Saldo dari modal" />
 			</div>
 		</div>
@@ -184,10 +184,3 @@
 		</ul>
 	</Card>
 </section>
-
-<style>
-	/* Progress di atas latar hijau tua: jalurnya dibuat transparan */
-	.progress-gelap :global([role='progressbar']) {
-		background: rgb(255 255 255 / 0.15);
-	}
-</style>

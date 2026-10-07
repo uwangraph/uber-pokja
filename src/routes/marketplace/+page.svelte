@@ -1,7 +1,7 @@
 <script>
 	import { onMount, untrack } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { Badge, Button, Card, EmptyState, Input, Modal, SearchInput, Select, showToast, Tabs } from '@khwarizmi/svelte-ui';
+	import { Badge, Button, Card, Checkbox, EmptyState, Input, Modal, SearchInput, Select, showToast, Tabs } from '@khwarizmi/svelte-ui';
 	import { ArrowRight, Bell, ClipboardList, Home, MapPin, MessageCircle, PackageCheck, SearchX, ShieldCheck, ShoppingBag, Store, Truck, UserRound } from 'lucide-svelte';
 	import { rupiah } from '$lib/format.js';
 	import { majelis } from '$lib/data.js';
@@ -206,7 +206,7 @@
 					<div>
 						<h1 class="max-w-2xl text-[2.4rem] leading-[1.09] font-black tracking-tight sm:text-5xl lg:text-[3.4rem]">Belanja sembako jadi <span class="text-gold-400">lebih dekat.</span></h1>
 						<p class="mt-5 max-w-lg text-sm leading-7 font-medium text-brand-100 sm:text-base">Marketplace kebutuhan harian untuk masyarakat dan jaringan Majelis Taklim. Harga jelas, pesanan mudah, dan stok terhubung ke UBER POKJA.</p>
-						<Button variant="warning" size="lg" class="mt-7 !bg-none !bg-gold-400 !text-brand-900 !shadow-[0_6px_0_0_#b58d16] hover:!translate-y-px hover:!shadow-[0_5px_0_0_#b58d16] active:!translate-y-1 active:!shadow-[0_2px_0_0_#b58d16]" onclick={() => document.getElementById('katalog')?.scrollIntoView({ behavior: 'smooth' })}>Jelajahi produk <ArrowRight size={17} strokeWidth={2.5} /></Button>
+						<Button variant="warning" size="lg" class="mt-7        " onclick={() => document.getElementById('katalog')?.scrollIntoView({ behavior: 'smooth' })}>Jelajahi produk <ArrowRight size={17} strokeWidth={2.5} /></Button>
 					</div>
 					<div class="hero-art relative mx-auto w-full max-w-md" aria-hidden="true">
 						<div class="hero-orbit"></div>
@@ -220,15 +220,15 @@
 		</section>
 
 		<section class="mx-auto grid max-w-6xl gap-3 px-4 pt-5 sm:grid-cols-3 sm:px-6">
-			<Card padding="none" class="flex min-h-[78px] items-center gap-3 !border-[#e9eadd] !bg-[#fffefa] !p-4 sm:!p-[17px]">
+			<Card padding="none" class="flex min-h-[78px] items-center gap-3    ">
 				<span class="grid size-10 shrink-0 place-items-center rounded-[13px] bg-[#eaf4e9] text-[#176846]"><PackageCheck size={19} /></span>
 				<div class="min-w-0"><strong class="block text-[13px] text-[#19392b]">Produk pilihan</strong><small class="mt-0.5 block text-[11px] text-[#66776d]">Kebutuhan harian tersedia</small></div>
 			</Card>
-			<Card padding="none" class="flex min-h-[78px] items-center gap-3 !border-[#e9eadd] !bg-[#fffefa] !p-4 sm:!p-[17px]">
+			<Card padding="none" class="flex min-h-[78px] items-center gap-3    ">
 				<span class="grid size-10 shrink-0 place-items-center rounded-[13px] bg-[#eaf4e9] text-[#176846]"><ShieldCheck size={19} /></span>
 				<div class="min-w-0"><strong class="block text-[13px] text-[#19392b]">Harga transparan</strong><small class="mt-0.5 block text-[11px] text-[#66776d]">Terlihat sebelum memesan</small></div>
 			</Card>
-			<Card padding="none" class="flex min-h-[78px] items-center gap-3 !border-[#e9eadd] !bg-[#fffefa] !p-4 sm:!p-[17px]">
+			<Card padding="none" class="flex min-h-[78px] items-center gap-3    ">
 				<span class="grid size-10 shrink-0 place-items-center rounded-[13px] bg-[#eaf4e9] text-[#176846]"><MapPin size={19} /></span>
 				<div class="min-w-0"><strong class="block text-[13px] text-[#19392b]">Dari Tenjolaya</strong><small class="mt-0.5 block text-[11px] text-[#66776d]">Belanja dari usaha bersama</small></div>
 			</Card>
@@ -275,12 +275,12 @@
 								<div class="mt-4 flex items-baseline gap-1"><p class="num text-xl font-black tracking-tight text-brand-800">{rupiah(p.jual)}</p><span class="text-xs font-medium text-slate-400">/ {p.satuan}</span></div>
 								{#if qty}
 									<div class="mt-4 flex items-center justify-between rounded-2xl border border-primary-300 bg-primary-50 p-1.5 shadow-[0_3px_0_0_#a8dbc0]">
-										<Button variant="ghost" size="icon-sm" class="!rounded-xl !border !border-primary-300 !bg-white !text-primary-700 !shadow-[0_2px_0_0_#a8dbc0] hover:!translate-y-px hover:!shadow-[0_1px_0_0_#a8dbc0] active:!translate-y-[2px] active:!shadow-none" aria-label="Kurangi {p.nama}" onclick={() => ubah(p, -1)}>−</Button>
+										<Button variant="ghost" size="icon-sm" class="" aria-label="Kurangi {p.nama}" onclick={() => ubah(p, -1)}>−</Button>
 										<span class="num min-w-24 text-center text-sm font-black text-primary-900">{qty} <span class="font-bold text-primary-600">{p.satuan}</span></span>
-										<Button variant="ghost" size="icon-sm" class="!rounded-xl !border !border-primary-300 !bg-white !text-primary-700 !shadow-[0_2px_0_0_#a8dbc0] hover:!translate-y-px hover:!shadow-[0_1px_0_0_#a8dbc0] active:!translate-y-[2px] active:!shadow-none" aria-label="Tambah {p.nama}" disabled={qty >= p.stok} onclick={() => tambah(p)}>+</Button>
+										<Button variant="ghost" size="icon-sm" class="" aria-label="Tambah {p.nama}" disabled={qty >= p.stok} onclick={() => tambah(p)}>+</Button>
 									</div>
 								{:else}
-									<Button fullWidth class="mt-4 !bg-none !bg-white !border-primary-700 !text-primary-700 !shadow-[0_3px_0_0_#0f5a3a] hover:!translate-y-px hover:!shadow-[0_2px_0_0_#0f5a3a] active:!translate-y-[3px] active:!shadow-none" variant="outline" disabled={habis} onclick={() => tambah(p)}><ShoppingBag size={16} /> {habis ? 'Stok habis' : 'Tambah ke keranjang'}</Button>
+									<Button fullWidth class="mt-4         " variant="outline" disabled={habis} onclick={() => tambah(p)}><ShoppingBag size={16} /> {habis ? 'Stok habis' : 'Tambah ke keranjang'}</Button>
 								{/if}
 							</div>
 						</article>
@@ -294,21 +294,16 @@
 
 
 	<Modal bind:open={cartOpen} title="Keranjang belanja" description={baris.length ? jumlahDipilih + ' item dipilih dari ' + jumlah + ' item di keranjang' : 'Keranjang Anda masih kosong.'} size="lg">
-		<div class="cart-body">
+		<div class="max-h-[60dvh] overflow-y-auto overscroll-contain">
 		{#if baris.length}
 			<div class="mb-4 flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-				<label class="flex cursor-pointer items-center gap-3 text-sm font-black text-slate-700">
-					<input class="cart-check" type="checkbox" checked={semuaDipilih} onchange={toggleSemua} />
-					Pilih semua
-				</label>
+				<Checkbox checked={semuaDipilih} onchange={toggleSemua} label="Pilih semua" />
 				<span class="text-xs font-bold text-slate-400">{barisDipilih.length} produk dipilih</span>
 			</div>
 			<div class="space-y-4">
 				{#each baris as b}
 					<div class="grid grid-cols-[auto_auto_minmax(0,1fr)] gap-3 rounded-3xl border p-4 transition {dipilih[b.id] ? 'border-primary-300 bg-primary-50/30' : 'border-slate-200 bg-white'} sm:grid-cols-[auto_auto_minmax(0,1fr)_auto] sm:items-center">
-						<label class="flex cursor-pointer items-center self-center" aria-label="Pilih {b.nama}">
-							<input class="cart-check" type="checkbox" checked={Boolean(dipilih[b.id])} onchange={() => togglePilih(b.id)} />
-						</label>
+						<div class="flex items-center self-center" aria-label="Pilih {b.nama}"><Checkbox checked={Boolean(dipilih[b.id])} onchange={() => togglePilih(b.id)} /></div>
 						<div class="product-visual {visual(b).tone} grid size-16 shrink-0 place-items-center rounded-2xl text-3xl" role="img" aria-label={visual(b).label}>{visual(b).emoji}</div>
 						<div class="min-w-0">
 							<p class="truncate text-base font-black text-slate-800">{b.nama}</p>
@@ -357,7 +352,7 @@
 			<span class="mx-auto grid size-14 place-items-center rounded-full bg-primary-50 text-primary-700"><PackageCheck size={28} strokeWidth={2.5} /></span>
 			<p class="mt-4 font-black text-slate-800">Selesaikan pembayaran. Setelah diverifikasi, Gudang akan memproses dan mengirim pesanan Anda.</p>
 		</div>
-		{#snippet footer()}<a href="/marketplace/pesanan" class="inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-primary-700 px-4 text-sm font-black text-white">Lacak pesanan</a>{/snippet}
+		{#snippet footer()}<Button fullWidth onclick={() => goto('/marketplace/pesanan')}>Lacak pesanan</Button>{/snippet}
 	</Modal>
 
 	<Modal bind:open={pesananOpen} title="Pesanan saya" description="Riwayat pembelian dan status pesanan Anda." size="lg">
@@ -410,42 +405,6 @@
 		position: relative;
 		background: linear-gradient(124deg, #0a3a28 0%, #105537 62%, #176a45 100%);
 		box-shadow: 0 20px 45px -28px rgb(7 46 31 / 0.7);
-	}
-	.market-nav {
-		display: flex;
-		min-height: 3.8rem;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: 0.18rem;
-		border-radius: 0.85rem;
-		color: #758078;
-		font-size: 0.69rem;
-		font-weight: 800;
-		transition: color 160ms ease, background-color 160ms ease;
-	}
-	.header-action {
-		align-items: center;
-		gap: 0.38rem;
-		border-radius: 0.7rem;
-		padding: 0.52rem 0.62rem;
-		color: #607083;
-		font-size: 0.78rem;
-		font-weight: 800;
-		transition: background-color 160ms ease, color 160ms ease;
-	}
-	.header-action:hover {
-		transform: translateY(1px);
-	}
-	.chat-float {
-		box-shadow: 0 13px 24px -9px rgb(5 69 42 / 0.58), 0 4px 0 #0d5435;
-	}
-	.chat-float:hover {
-		box-shadow: 0 10px 20px -9px rgb(5 69 42 / 0.58), 0 3px 0 #0d5435;
-	}
-	.market-nav.aktif {
-		background: #edf8f0;
-		color: #0f6a42;
 	}
 	.hero-shell::before,
 	.hero-shell::after {
@@ -555,30 +514,4 @@
 	}
 	/* Batasi tinggi modal terhadap viewport di semua perangkat. Header dan
 	   footer selalu terlihat; yang bergulir hanya daftar produk serta form. */
-	:global([role='dialog'][aria-label='Keranjang belanja']) {
-		display: flex;
-		max-height: calc(100vh - 2rem);
-		max-height: calc(100dvh - 2rem);
-		flex-direction: column;
-	}
-	:global([role='dialog'][aria-label='Keranjang belanja'] > div:first-child),
-	:global([role='dialog'][aria-label='Keranjang belanja'] > div:last-child) {
-		flex-shrink: 0;
-	}
-	:global([role='dialog'][aria-label='Keranjang belanja'] > div:nth-child(2)) {
-		min-height: 0;
-		flex: 1 1 auto;
-		overflow-y: auto;
-		overscroll-behavior: contain;
-		-webkit-overflow-scrolling: touch;
-	}
-	.cart-body {
-		min-height: 0;
-	}
-	.cart-check {
-		width: 1.25rem;
-		height: 1.25rem;
-		accent-color: var(--primary);
-		cursor: pointer;
-	}
 </style>
