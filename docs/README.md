@@ -15,6 +15,7 @@ Aplikasi web untuk mengelola operasional **UBER (Usaha Bersama) POKJA Majelis Ta
 | [PRD.md](PRD.md) | Kebutuhan produk: tujuan, pengguna, fitur, alur, MVP, prinsip UI/UX |
 | [uber-pokja.md](uber-pokja.md) | Timeline program Usaha Bersama, dari pembentukan sampai launching penjualan perdana |
 | [hak-akses.md](hak-akses.md) | Menu dan izin tiap peran |
+| [commit.md](commit.md) | Catatan cara commit dan push |
 
 ---
 
