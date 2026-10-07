@@ -6,7 +6,7 @@ export const nav = [
 	{ href: '/pembelian', label: 'Pembelian', icon: 'receipt', group: 'Transaksi' },
 	{ href: '/produk', label: 'Produk', icon: 'box', group: 'Inventori' },
 	{ href: '/stok', label: 'Stok', icon: 'layers', group: 'Inventori' },
-	{ href: '/majelis', label: 'Majelis Taklim', icon: 'users', group: 'Relasi' },
+	{ href: '/majelis', label: 'Majelis Taklim', labelPendek: 'MT', icon: 'users', group: 'Relasi' },
 	{ href: '/keuangan', label: 'Keuangan', icon: 'wallet', group: 'Keuangan' },
 	{ href: '/laporan', label: 'Laporan', icon: 'chart', group: 'Keuangan' },
 	{ href: '/pengguna', label: 'Pengguna', icon: 'users', group: 'Administrasi' }

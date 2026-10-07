@@ -225,7 +225,7 @@
 					<span class="grid h-7 w-12 place-items-center rounded-full transition {active(item.href) ? 'bg-brand-50' : ''}">
 						<Icon name={item.icon} class="size-5" strokeWidth={2.5} />
 					</span>
-					{item.label}
+					{item.labelPendek ?? item.label}
 				</a>
 			{/each}
 			<button class="flex min-h-16 flex-col items-center justify-center gap-1 text-[11px] font-black text-slate-400" onclick={() => (menuOpen = true)}>
