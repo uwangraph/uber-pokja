@@ -75,28 +75,28 @@
 			</div>
 		</div>
 
-		<div class="bg-slate-100/70 p-4 sm:p-8">
-			<article class="mx-auto max-w-xl rounded-xl bg-white p-6 shadow-[0_6px_0_0_#E2E8F0] ring-1 ring-slate-200 sm:p-10">
-				<header class="flex items-start justify-between gap-4 border-b-2 border-slate-800 pb-5">
-					<div>
+		<div class="bg-slate-100/70 p-3 sm:p-8">
+			<article class="mx-auto max-w-xl rounded-xl bg-white p-5 shadow-[0_6px_0_0_#E2E8F0] ring-1 ring-slate-200 sm:p-10">
+				<header class="flex items-start justify-between gap-3 border-b-2 border-slate-800 pb-5">
+					<div class="min-w-0">
 						<p class="text-[11px] font-black tracking-widest text-slate-400 uppercase">UBER POKJA · MT Tenjolaya</p>
 						<h2 class="mt-2 text-xl font-black tracking-tight">{aktif.judul}</h2>
 						<p class="mt-1 text-sm font-bold text-slate-400">Periode {namaPeriode}</p>
 					</div>
-					<img src="/logo.png" alt="" class="size-12" />
+					<img src="/logo.png" alt="" class="size-10 shrink-0 sm:size-12" />
 				</header>
 				<dl class="divide-y divide-slate-100">
 					{#each aktif.baris as [k, v]}
-						<div class="flex justify-between gap-4 py-3.5 text-sm"><dt class="font-bold text-slate-500">{k}</dt><dd class="num font-black">{v}</dd></div>
+						<div class="flex justify-between gap-4 py-3.5 text-sm"><dt class="font-bold text-slate-500">{k}</dt><dd class="num shrink-0 text-right font-black whitespace-nowrap">{v}</dd></div>
 					{/each}
 				</dl>
-				<div class="mt-2 flex justify-between gap-4 rounded-xl border border-primary-200 bg-primary-50 px-4 py-3.5">
+				<div class="mt-2 flex items-center justify-between gap-3 rounded-xl border border-primary-200 bg-primary-50 px-4 py-3.5">
 					<span class="text-sm font-black text-primary-800">{aktif.total[0]}</span>
-					<span class="num font-black text-primary-800">{aktif.total[1]}</span>
+					<span class="num shrink-0 text-right font-black whitespace-nowrap text-primary-800">{aktif.total[1]}</span>
 				</div>
-				<footer class="mt-10 grid grid-cols-2 gap-6 text-center text-xs font-bold text-slate-400">
-					<div><p>Dibuat oleh</p><div class="mx-auto mt-12 w-32 border-t border-slate-300 pt-1.5">Bendahara</div></div>
-					<div><p>Mengetahui</p><div class="mx-auto mt-12 w-32 border-t border-slate-300 pt-1.5">Penanggung jawab</div></div>
+				<footer class="mt-10 grid grid-cols-2 gap-4 text-center sm:gap-6 text-xs font-bold text-slate-400">
+					<div><p>Dibuat oleh</p><div class="mx-auto mt-12 w-full max-w-32 border-t border-slate-300 pt-1.5">Bendahara</div></div>
+					<div><p>Mengetahui</p><div class="mx-auto mt-12 w-full max-w-32 border-t border-slate-300 pt-1.5">Penanggung jawab</div></div>
 				</footer>
 			</article>
 		</div>
