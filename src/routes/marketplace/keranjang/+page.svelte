@@ -25,6 +25,7 @@
 	$effect(() => {
 		if (!siap) return;
 		localStorage.setItem('uber-pokja:marketplace:cart', JSON.stringify(keranjang));
+		window.dispatchEvent(new Event('keranjang-berubah'));
 		localStorage.setItem('uber-pokja:marketplace:selected', JSON.stringify(dipilih));
 	});
 	function ubah(p, selisih) {
