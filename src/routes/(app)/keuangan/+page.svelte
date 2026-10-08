@@ -1,13 +1,13 @@
 <script>
 	import { goto } from '$app/navigation';
-	import { Button, Card, Input, Select, DatePicker, EmptyState, showToast } from '@khwarizmi/svelte-ui';
+	import { Button, Card, DescriptionList, Drawer, Input, Select, DatePicker, EmptyState, showToast } from '@khwarizmi/svelte-ui';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Badge from '$lib/components/Badge.svelte';
 	import Icon from '$lib/components/Icon.svelte';
 	import Tabs from '$lib/components/Tabs.svelte';
 	import Search from '$lib/components/Search.svelte';
 	import Toolbar from '$lib/components/Toolbar.svelte';
-	import { kas as dataKas, ringkasan } from '$lib/data.js';
+	import { kas as dataKas, ringkasan, penjualan, pembelian } from '$lib/data.js';
 	import { rupiah, tanggal } from '$lib/format.js';
 	import { browser } from '$app/environment';
 	import { bolehKelola } from '$lib/data.js';
@@ -28,6 +28,12 @@
 	let tgl = $state('2026-09-25');
 
 	const tone = { masuk: 'green', keluar: 'red', modal: 'gray' };
+	const opsiFilter = [
+		{ value: 'semua', label: 'Semua transaksi' },
+		{ value: 'masuk', label: 'Pemasukan' },
+		{ value: 'keluar', label: 'Pengeluaran' },
+		{ value: 'modal', label: 'Modal' }
+	];
 	const daftar = $derived(
 		kas.filter((k) => (filter === 'semua' || k.jenis === filter) && (k.ket + ' ' + k.kategori).toLowerCase().includes(cariKas.toLowerCase()))
 	);
@@ -41,16 +47,35 @@
 	$effect(() => {
 		if (!opsiKategori[jenis].includes(kategori)) kategori = opsiKategori[jenis][0];
 	});
+	// Detail transaksi kas (dibuka dengan mengetuk baris)
+	let detail = $state(null);
+	let detailOpen = $state(false);
+	const labelJenis = { masuk: 'Pemasukan', keluar: 'Pengeluaran', modal: 'Modal' };
+	function bukaDetail(k) {
+		detail = k;
+		detailOpen = true;
+	}
+	// Transaksi yang berasal dari penjualan (PJ-) atau pembelian (PB-) ditautkan ke datanya.
+	const rujukan = $derived.by(() => {
+		const no = detail?.ket.match(/^(PJ|PB)-\d+/)?.[0];
+		if (!no) return null;
+		if (no.startsWith('PJ')) {
+			const t = penjualan.find((x) => x.no === no);
+			return t && { no, halaman: '/penjualan?tab=riwayat', label: 'Lihat di Penjualan', rincian: [{ label: 'Pembeli', value: t.pembeli }, { label: 'Jumlah barang', value: `${t.item} item` }, { label: 'Status', value: t.status }] };
+		}
+		const b = pembelian.find((x) => x.no === no);
+		return b && { no, halaman: '/pembelian', label: 'Lihat di Pembelian', rincian: [{ label: 'Supplier', value: b.supplier }, { label: 'Status barang', value: b.status }] };
+	});
 	const labaKotor = ringkasan.omzetBulan - ringkasan.pengeluaranBulan;
 
 	function simpan() {
 		const nilai = +String(jumlah).replace(/\D/g, '');
 		if (!nilai) {
-			showToast({ tone: 'warning', title: 'Jumlah belum diisi', description: 'Masukkan jumlah transaksi terlebih dahulu.' });
+			showToast({ tone: 'warning', title: 'Jumlah belum diisi', value: 'Masukkan jumlah transaksi terlebih dahulu.' });
 			return;
 		}
 		kas.unshift({ tgl, jenis, kategori, ket: ket || kategori, jumlah: nilai });
-		showToast({ tone: 'success', title: 'Transaksi kas tersimpan', description: `${kategori} · ${rupiah(nilai)}` });
+		showToast({ tone: 'success', title: 'Transaksi kas tersimpan', value: `${kategori} · ${rupiah(nilai)}` });
 		jumlah = '';
 		ket = '';
 	}
@@ -111,16 +136,9 @@
 					<Search bind:value={cariKas} id="cari-kas" placeholder="Cari keterangan…" />
 				{/snippet}
 				{#snippet filters()}
-					<Tabs
-						bind:value={filter}
-						ariaLabel="Filter arus kas"
-						items={[
-							{ value: 'semua', label: 'Semua' },
-							{ value: 'masuk', label: 'Masuk' },
-							{ value: 'keluar', label: 'Keluar' },
-							{ value: 'modal', label: 'Modal' }
-						]}
-					/>
+					<!-- 4 pilihan tidak muat sebagai tab di HP: pakai dropdown -->
+					<div class="sm:hidden"><Select options={opsiFilter} bind:value={filter} aria-label="Filter arus kas" /></div>
+					<div class="max-sm:hidden"><Tabs bind:value={filter} ariaLabel="Filter arus kas" items={opsiFilter} /></div>
 				{/snippet}
 			</Toolbar>
 		</div>
@@ -128,7 +146,8 @@
 			<ul class="divide-y divide-slate-100 border-t border-slate-100">
 				{#each daftar as k}
 					{@const keluar = k.jenis === 'keluar'}
-					<li class="flex items-center gap-3 px-5 py-3.5 transition hover:bg-slate-50 sm:px-6">
+					<li>
+					<button type="button" class="flex w-full items-center gap-3 px-5 py-3.5 text-left transition hover:bg-slate-50 active:bg-slate-100 sm:px-6" onclick={() => bukaDetail(k)} aria-label="Detail {k.ket}">
 						<span class="grid size-10 shrink-0 place-items-center rounded-xl border {keluar ? 'border-red-200 bg-red-50 text-red-600' : k.jenis === 'modal' ? 'border-amber-200 bg-amber-50 text-amber-600' : 'border-emerald-200 bg-emerald-50 text-emerald-600'}">
 							<Icon name={keluar ? 'arrowUp' : k.jenis === 'modal' ? 'coins' : 'arrowDown'} class="size-4" strokeWidth={2.5} />
 						</span>
@@ -137,6 +156,8 @@
 							<p class="mt-1 flex flex-wrap items-center gap-2 text-xs font-bold text-slate-400">{tanggal(k.tgl)} <Badge tone={tone[k.jenis]}>{k.kategori}</Badge></p>
 						</div>
 						<p class="num shrink-0 text-sm font-black {keluar ? 'text-red-600' : 'text-emerald-600'}">{keluar ? '−' : '+'}{rupiah(k.jumlah)}</p>
+						<Icon name="chevron" class="size-4 shrink-0 text-slate-300" />
+					</button>
 					</li>
 				{/each}
 			</ul>
@@ -145,3 +166,30 @@
 		{/if}
 	</Card>
 </div>
+
+<!-- Detail transaksi kas: sheet dari bawah (nyaman di HP) -->
+<Drawer bind:open={detailOpen} title="Detail transaksi" description={detail ? labelJenis[detail.jenis] : ''} side="bottom" size="md">
+	{#if detail}
+		{@const keluar = detail.jenis === 'keluar'}
+		<div class="rounded-2xl p-4 text-center {keluar ? 'bg-red-50' : detail.jenis === 'modal' ? 'bg-amber-50' : 'bg-emerald-50'}">
+			<p class="text-xs font-black tracking-widest text-slate-500 uppercase">Jumlah</p>
+			<p class="num mt-1 text-3xl font-black {keluar ? 'text-red-600' : 'text-emerald-700'}">{keluar ? '−' : '+'}{rupiah(detail.jumlah)}</p>
+		</div>
+		<DescriptionList
+			class="mt-4"
+			orientation="row"
+			items={[
+				{ label: 'Keterangan', value: detail.ket },
+				{ label: 'Kategori', value: detail.kategori },
+				{ label: 'Tanggal', value: new Date(detail.tgl).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) },
+				...(rujukan ? [{ label: 'No. referensi', value: rujukan.no }, ...rujukan.rincian] : [])
+			]}
+		/>
+	{/if}
+	{#snippet footer()}
+		<div class="grid w-full gap-2 {rujukan ? 'grid-cols-2' : ''}">
+			<Button variant="outline" onclick={() => (detailOpen = false)}>Tutup</Button>
+			{#if rujukan}<Button onclick={() => goto(rujukan.halaman)}>{rujukan.label}</Button>{/if}
+		</div>
+	{/snippet}
+</Drawer>
