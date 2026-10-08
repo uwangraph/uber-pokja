@@ -1,6 +1,6 @@
 <script>
 	import { goto } from '$app/navigation';
-	import { Button, Card, ToggleGroup, Input, Select, DatePicker, EmptyState, showToast } from '@khwarizmi/svelte-ui';
+	import { Button, Card, Input, Select, DatePicker, EmptyState, showToast } from '@khwarizmi/svelte-ui';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Badge from '$lib/components/Badge.svelte';
 	import Icon from '$lib/components/Icon.svelte';
@@ -88,16 +88,11 @@
 	{#if kelola}<Card padding="lg" class="h-fit xl:sticky xl:top-24">
 		<h2 class="font-black">Catat transaksi kas</h2>
 		<div class="mt-4 space-y-4">
-			<ToggleGroup
-				bind:value={jenis}
-				size="sm"
-				class="w-full"
-				items={[
+			<Tabs items={[
 					{ value: 'masuk', label: 'Pemasukan' },
 					{ value: 'keluar', label: 'Pengeluaran' },
 					{ value: 'modal', label: 'Modal' }
-				]}
-			/>
+				]} bind:value={jenis} fill ariaLabel="Jenis transaksi" />
 			<Input label="Jumlah" prefix="Rp" inputmode="numeric" placeholder="0" bind:value={jumlah} />
 			<Select label="Kategori" options={opsiKategori[jenis].map((k) => ({ value: k, label: k }))} bind:value={kategori} />
 			<Input label="Keterangan" placeholder="mis. Ongkos angkut barang" bind:value={ket} />
