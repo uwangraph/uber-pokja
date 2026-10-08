@@ -9,6 +9,12 @@
 	import { tanggal } from '$lib/format.js';
 	import { browser } from '$app/environment';
 	import { bolehKelola } from '$lib/data.js';
+
+	const ringkasStok = [
+		{ key: 'aman', label: 'Aman', icon: 'check', warna: 'bg-emerald-50 text-emerald-600' },
+		{ key: 'menipis', label: 'Menipis', icon: 'alert', warna: 'bg-amber-50 text-amber-600' },
+		{ key: 'habis', label: 'Habis', icon: 'x', warna: 'bg-red-50 text-red-600' }
+	];
 	let role = $state('');
 	const kelola = $derived(bolehKelola(role, 'stok'));
 	$effect(() => {
@@ -75,11 +81,22 @@
 	{/snippet}
 </PageHeader>
 
-<!-- Angka pendek: tiga kolom sejajar juga di HP -->
-<div class="grid grid-cols-3 gap-2 sm:gap-4">
-	<Stat label="Aman" value={hitung('aman')} hint="produk" icon="check" />
-	<Stat label="Menipis" value={hitung('menipis')} hint="produk" icon="alert" tone="gold" />
-	<Stat label="Habis" value={hitung('habis')} hint="produk" icon="x" tone="red" />
+<!-- HP: ubin ringkas tiga kolom (ikon di atas, angka, label) — StatCard terlalu sempit di sini -->
+<div class="grid grid-cols-3 gap-2 sm:hidden">
+	{#each ringkasStok as r (r.key)}
+		<Card padding="sm" class="flex flex-col items-center gap-1.5 text-center">
+			<span class="grid size-9 place-items-center rounded-xl {r.warna}"><Icon name={r.icon} class="size-4" strokeWidth={2.5} /></span>
+			<p class="num text-2xl leading-none font-black text-slate-900">{hitung(r.key)}</p>
+			<p class="text-xs font-bold text-slate-500">{r.label}</p>
+		</Card>
+	{/each}
+</div>
+
+<!-- Tablet ke atas: StatCard -->
+<div class="grid grid-cols-3 gap-4 max-sm:hidden">
+	<Stat label="Stok aman" value="{hitung('aman')} produk" hint="Di atas batas minimum" icon="check" />
+	<Stat label="Menipis" value="{hitung('menipis')} produk" hint="Perlu segera dibeli" icon="alert" tone="gold" />
+	<Stat label="Habis" value="{hitung('habis')} produk" hint="Tidak bisa dijual" icon="x" tone="red" />
 </div>
 
 <div class="mt-5 grid gap-5 lg:grid-cols-[1.15fr_1fr]">
