@@ -90,13 +90,14 @@
 						<div class="flex justify-between gap-4 py-3.5 text-sm"><dt class="font-bold text-slate-500">{k}</dt><dd class="num shrink-0 text-right font-black whitespace-nowrap">{v}</dd></div>
 					{/each}
 				</dl>
-				<div class="mt-2 flex items-center justify-between gap-3 rounded-xl border border-primary-200 bg-primary-50 px-4 py-3.5">
-					<span class="text-sm font-black text-primary-800">{aktif.total[0]}</span>
-					<span class="num shrink-0 text-right font-black whitespace-nowrap text-primary-800">{aktif.total[1]}</span>
+				<!-- Total: HP label di atas nominal (label panjang tidak terlipat); sm ke atas sebaris. -->
+				<div class="mt-2 flex flex-col gap-1 rounded-xl border border-primary-200 bg-primary-50 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+					<span class="text-xs font-black text-primary-700 sm:text-sm sm:text-primary-800">{aktif.total[0]}</span>
+					<span class="num text-xl font-black whitespace-nowrap text-primary-800 sm:text-base">{aktif.total[1]}</span>
 				</div>
-				<footer class="mt-10 grid grid-cols-2 gap-4 text-center sm:gap-6 text-xs font-bold text-slate-400">
-					<div><p>Dibuat oleh</p><div class="mx-auto mt-12 w-full max-w-32 border-t border-slate-300 pt-1.5">Bendahara</div></div>
-					<div><p>Mengetahui</p><div class="mx-auto mt-12 w-full max-w-32 border-t border-slate-300 pt-1.5">Penanggung jawab</div></div>
+				<footer class="mt-10 grid grid-cols-2 gap-6 text-center text-xs font-bold text-slate-400 sm:gap-10">
+					<div><p>Dibuat oleh</p><div class="mx-auto mt-12 w-4/5 max-w-36 border-t border-slate-300 pt-1.5">Bendahara</div></div>
+					<div><p>Mengetahui</p><div class="mx-auto mt-12 w-4/5 max-w-36 border-t border-slate-300 pt-1.5">Penanggung jawab</div></div>
 				</footer>
 			</article>
 		</div>
