@@ -223,5 +223,5 @@
 		<Button class="mt-4 w-full" disabled={!kameraSiap} onclick={ambilFoto}><Camera size={17} /> Ambil foto</Button>
 	{/if}
 
-	{#snippet footer()}<div class="flex w-full justify-end gap-2"><Button variant="outline" onclick={tutupModal}>Batal</Button><Button disabled={!fotoBukti} onclick={selesai}><CheckCircle2 size={17} /> Simpan bukti & selesai</Button></div>{/snippet}
+	{#snippet footer()}<div class="grid w-full grid-cols-[auto_1fr] gap-2 sm:flex sm:justify-end"><Button variant="outline" onclick={tutupModal}>Batal</Button><Button class="whitespace-nowrap" disabled={!fotoBukti} onclick={selesai}><CheckCircle2 size={17} /> Simpan & selesai</Button></div>{/snippet}
 </Modal>
