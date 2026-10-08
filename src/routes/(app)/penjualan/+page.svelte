@@ -190,7 +190,7 @@
 		</Card>
 
 		<!-- Ringkasan -->
-		<Card padding="none" class="h-fit overflow-hidden lg:sticky lg:top-24">
+		<Card padding="none" class="h-fit min-w-0 overflow-hidden lg:sticky lg:top-24">
 			<div id="ringkasan" class="space-y-4 p-5">
 				<div>
 					<p class="text-xs font-black tracking-widest text-primary-600 uppercase">Langkah 2</p>

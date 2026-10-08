@@ -4,4 +4,4 @@
 	let { items, value = $bindable(), ariaLabel = '', fill = false } = $props();
 </script>
 
-<Tabs tabs={items} bind:value {ariaLabel} {fill} />
+<Tabs tabs={items} bind:value {ariaLabel} {fill} class={fill ? 'w-full' : ''} />

@@ -85,12 +85,12 @@
 
 <div class="mt-5 grid gap-5 xl:grid-cols-[380px_1fr]">
 	<!-- Form hanya untuk Admin dan Keuangan; role lain melihat arus kas. -->
-	{#if kelola}<Card padding="lg" class="h-fit xl:sticky xl:top-24">
+	{#if kelola}<Card padding="lg" class="h-fit min-w-0 xl:sticky xl:top-24">
 		<h2 class="font-black">Catat transaksi kas</h2>
 		<div class="mt-4 space-y-4">
 			<Tabs items={[
-					{ value: 'masuk', label: 'Pemasukan' },
-					{ value: 'keluar', label: 'Pengeluaran' },
+					{ value: 'masuk', label: 'Masuk' },
+					{ value: 'keluar', label: 'Keluar' },
 					{ value: 'modal', label: 'Modal' }
 				]} bind:value={jenis} fill ariaLabel="Jenis transaksi" />
 			<Input label="Jumlah" prefix="Rp" inputmode="numeric" placeholder="0" bind:value={jumlah} />
