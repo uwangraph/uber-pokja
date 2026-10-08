@@ -67,7 +67,7 @@
 		</div>
 	</section>
 
-	<div class="grid grid-cols-2 gap-3 sm:gap-4 xl:col-span-2">
+	<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:col-span-2">
 		<Stat label="Omzet bulan ini" value={rupiah(ringkasan.omzetBulan)} hint="{ringkasan.transaksiBulan} transaksi" icon="trendUp" />
 		<Stat label="Pengeluaran" value={rupiah(ringkasan.pengeluaranBulan)} hint="Beli + operasional" icon="receipt" tone="gray" />
 		<Stat label="Piutang" value={rupiah(ringkasan.piutang)} hint="Dari 2 Majelis Taklim" icon="users" tone="gold" />

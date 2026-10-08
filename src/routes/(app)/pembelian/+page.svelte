@@ -74,10 +74,10 @@
 
 <PageHeader eyebrow="Transaksi" title="Pembelian" subtitle="Pengadaan barang dari supplier." />
 
-<div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
 	<Stat label="Pembelian bulan ini" value={rupiah(totalBeli)} hint="{pembelian.length} faktur" icon="receipt" />
 	<Stat label="Menunggu diterima" value="{menunggu} faktur" hint="Barang belum datang" icon="truck" tone="gray" />
-	<div class="col-span-2 lg:col-span-1">
+	<div class="sm:col-span-2 lg:col-span-1">
 		<Stat label="Utang ke supplier" value={rupiah(belumLunas.reduce((s, b) => s + b.total, 0))} hint="{belumLunas.length} faktur belum lunas" icon="coins" tone="gold" />
 	</div>
 </div>
