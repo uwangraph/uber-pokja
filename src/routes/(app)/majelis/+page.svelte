@@ -15,6 +15,14 @@
 	let formOpen = $state(false);
 	let baru = $state({ nama: '', desa: '', ketua: '', hp: '' });
 	const list = $derived(majelis.filter((m) => (m.nama + m.desa + m.ketua).toLowerCase().includes(cari.toLowerCase())));
+	// Tampilkan bertahap agar 70+ MT tidak membuat halaman sangat panjang.
+	const PER_HALAMAN = 12;
+	let batas = $state(PER_HALAMAN);
+	$effect(() => {
+		cari;
+		batas = PER_HALAMAN;
+	});
+	const tampil = $derived(list.slice(0, batas));
 	const totalTransaksi = $derived(majelis.reduce((s, m) => s + m.transaksi, 0));
 	const maks = $derived(Math.max(...majelis.map((m) => m.transaksi)));
 	function bukaTambah() {
@@ -66,8 +74,26 @@
 </Modal>
 
 {#if list.length}
-	<div class="grid-kartu">
-		{#each list as m}
+	<!-- HP: daftar ringkas satu kartu -->
+	<Card padding="none" class="overflow-hidden md:hidden">
+		<ul class="divide-y divide-slate-100">
+			{#each tampil as m (m.id)}
+				<li class="flex items-center gap-3 px-4 py-3">
+					<Avatar nama={m.nama} size="size-10" />
+					<div class="min-w-0 flex-1">
+						<p class="truncate text-sm font-black">{m.nama}</p>
+						<p class="truncate text-xs font-bold text-slate-400">Desa {m.desa} · {m.ketua}</p>
+						<p class="num mt-0.5 text-xs font-bold text-primary-700">{m.transaksi}× transaksi</p>
+					</div>
+					{#if m.hp}<Button variant="outline" size="icon-sm" aria-label="Telepon {m.ketua}" onclick={() => (location.href = `tel:${m.hp.replaceAll('-', '')}`)}><Icon name="phone" class="size-4" /></Button>{/if}
+				</li>
+			{/each}
+		</ul>
+	</Card>
+
+	<!-- Tablet & laptop: kartu -->
+	<div class="grid-kartu max-md:hidden">
+		{#each tampil as m (m.id)}
 			<Card padding="lg" class="flex flex-col">
 				<div class="flex items-start justify-between gap-3">
 					<Avatar nama={m.nama} size="size-11" />
@@ -96,6 +122,13 @@
 			</Card>
 		{/each}
 	</div>
+
+	{#if list.length > batas}
+		<div class="mt-4 flex flex-col items-center gap-2">
+			<p class="text-xs font-bold text-slate-400">Menampilkan {tampil.length} dari {list.length} MT</p>
+			<Button variant="outline" onclick={() => (batas += PER_HALAMAN)}>Tampilkan lebih banyak</Button>
+		</div>
+	{/if}
 {:else}
 	<EmptyState icon={SearchX} title="Majelis Taklim tidak ditemukan" description="Coba kata kunci lain." />
 {/if}

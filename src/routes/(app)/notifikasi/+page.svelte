@@ -41,9 +41,10 @@
 		{/snippet}
 		{#snippet action()}
 			<Button variant="outline" size="icon-lg" class="sm:hidden" disabled={!baru} onclick={() => tandaiSemua(role)} aria-label="Tandai semua dibaca" title="Tandai semua dibaca"><Icon name="check" class="size-4" strokeWidth={3} /></Button>
-			<Button variant="outline" class="hidden h-12 sm:inline-flex" disabled={!baru} onclick={() => tandaiSemua(role)}>
+			<!-- `hidden` pada Button kalah oleh inline-flex bawaannya, jadi disembunyikan lewat pembungkus -->
+			<span class="hidden sm:inline-flex"><Button variant="outline" class="h-12" disabled={!baru} onclick={() => tandaiSemua(role)}>
 				<Icon name="check" class="size-4" strokeWidth={3} /> Tandai semua dibaca
-			</Button>
+			</Button></span>
 		{/snippet}
 	</Toolbar>
 	{#if daftar.length}

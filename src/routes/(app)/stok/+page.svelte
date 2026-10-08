@@ -75,10 +75,11 @@
 	{/snippet}
 </PageHeader>
 
-<div class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
-	<Stat label="Stok aman" value="{hitung('aman')} produk" hint="Di atas batas minimum" icon="check" />
-	<Stat label="Menipis" value="{hitung('menipis')} produk" hint="Perlu segera dibeli" icon="alert" tone="gold" />
-	<Stat label="Habis" value="{hitung('habis')} produk" hint="Tidak bisa dijual" icon="x" tone="red" />
+<!-- Angka pendek: tiga kolom sejajar juga di HP -->
+<div class="grid grid-cols-3 gap-2 sm:gap-4">
+	<Stat label="Aman" value={hitung('aman')} hint="produk" icon="check" />
+	<Stat label="Menipis" value={hitung('menipis')} hint="produk" icon="alert" tone="gold" />
+	<Stat label="Habis" value={hitung('habis')} hint="produk" icon="x" tone="red" />
 </div>
 
 <div class="mt-5 grid gap-5 lg:grid-cols-[1.15fr_1fr]">

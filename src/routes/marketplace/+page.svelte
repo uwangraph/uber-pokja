@@ -58,7 +58,7 @@
 		6: { emoji: '🍜', tone: 'noodle', label: 'Mi instan' },
 		7: { emoji: '🍵', tone: 'Teh celup' }
 	};
-	const visual = (p) => visualProduk[p.id] ?? { emoji: '🛍️', tone: 'default', label: 'Produk pilihan' };
+	const visual = (p) => visualProduk[p.produkId ?? p.id] ?? { emoji: '🛍️', tone: 'default', label: 'Produk pilihan' };
 	const daftar = $derived(
 		produk.filter((p) => {
 			const cocokCari = p.nama.toLowerCase().includes(cari.toLowerCase());
@@ -222,18 +222,19 @@
 			</div>
 		</section>
 
-		<section class="mx-auto grid max-w-6xl gap-3 px-4 pt-5 sm:grid-cols-3 sm:px-6">
-			<Card padding="none" class="flex min-h-[78px] items-center gap-3">
+		<!-- HP: tiga keunggulan sejajar (ikon di atas, judul saja); tablet ke atas: ikon di kiri + keterangan -->
+		<section class="mx-auto grid max-w-6xl grid-cols-3 gap-2 px-4 pt-5 sm:gap-3 sm:px-6">
+			<Card padding="none" class="flex flex-col items-center gap-2 p-3 text-center sm:min-h-[78px] sm:flex-row sm:gap-3 sm:p-4 sm:text-left">
 				<span class="grid size-10 shrink-0 place-items-center rounded-[13px] bg-[#eaf4e9] text-[#176846]"><PackageCheck size={19} /></span>
-				<div class="min-w-0"><strong class="block text-[13px] text-[#19392b]">Produk pilihan</strong><small class="mt-0.5 block text-[11px] text-[#66776d]">Kebutuhan harian tersedia</small></div>
+				<div class="min-w-0"><strong class="block text-xs leading-tight text-[#19392b] sm:text-[13px]">Produk pilihan</strong><small class="mt-0.5 hidden text-[11px] text-[#66776d] sm:block">Kebutuhan harian tersedia</small></div>
 			</Card>
-			<Card padding="none" class="flex min-h-[78px] items-center gap-3">
+			<Card padding="none" class="flex flex-col items-center gap-2 p-3 text-center sm:min-h-[78px] sm:flex-row sm:gap-3 sm:p-4 sm:text-left">
 				<span class="grid size-10 shrink-0 place-items-center rounded-[13px] bg-[#eaf4e9] text-[#176846]"><ShieldCheck size={19} /></span>
-				<div class="min-w-0"><strong class="block text-[13px] text-[#19392b]">Harga transparan</strong><small class="mt-0.5 block text-[11px] text-[#66776d]">Terlihat sebelum memesan</small></div>
+				<div class="min-w-0"><strong class="block text-xs leading-tight text-[#19392b] sm:text-[13px]">Harga transparan</strong><small class="mt-0.5 hidden text-[11px] text-[#66776d] sm:block">Terlihat sebelum memesan</small></div>
 			</Card>
-			<Card padding="none" class="flex min-h-[78px] items-center gap-3">
+			<Card padding="none" class="flex flex-col items-center gap-2 p-3 text-center sm:min-h-[78px] sm:flex-row sm:gap-3 sm:p-4 sm:text-left">
 				<span class="grid size-10 shrink-0 place-items-center rounded-[13px] bg-[#eaf4e9] text-[#176846]"><MapPin size={19} /></span>
-				<div class="min-w-0"><strong class="block text-[13px] text-[#19392b]">Dari Tenjolaya</strong><small class="mt-0.5 block text-[11px] text-[#66776d]">Belanja dari usaha bersama</small></div>
+				<div class="min-w-0"><strong class="block text-xs leading-tight text-[#19392b] sm:text-[13px]">Dari Tenjolaya</strong><small class="mt-0.5 hidden text-[11px] text-[#66776d] sm:block">Belanja dari usaha bersama</small></div>
 			</Card>
 		</section>
 
@@ -255,35 +256,36 @@
 			</div>
 
 			{#if daftar.length}
-				<div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+				<!-- HP: 2 kolom ringkas; tablet 2-3, laptop 4 -->
+				<div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
 					{#each daftar as p (p.id)}
 						{@const qty = keranjang[p.id] ?? 0}
 						{@const habis = p.stok === 0}
-						<article class="product-card flex flex-col overflow-hidden rounded-[1.5rem] border border-[#e8e9df] bg-white">
-							<div class="product-visual {visual(p).tone} relative grid aspect-[4/2.65] place-items-center">
+						<article class="product-card flex min-w-0 flex-col overflow-hidden rounded-2xl border sm:rounded-[1.5rem] border-[#e8e9df] bg-white">
+							<div class="product-visual {visual(p).tone} relative grid aspect-[4/3] place-items-center sm:aspect-[4/2.65]">
 								<span class="product-emoji" role="img" aria-label={visual(p).label}>{visual(p).emoji}</span>
-								<span class="absolute top-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-black text-brand-900 shadow-sm">{kategoriProduk(p)}</span>
+								<span class="absolute top-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-black text-brand-900 shadow-sm max-sm:hidden">{kategoriProduk(p)}</span>
 							</div>
-							<div class="flex flex-1 flex-col p-4 sm:p-5">
+							<div class="flex flex-1 flex-col p-3 sm:p-5">
 								{#if p.tokoNama}
-									<a href="/marketplace/toko/{p.majelisId}" class="mb-1.5 inline-flex w-fit items-center gap-1 rounded-full bg-slate-100 px-2 py-1 text-[11px] font-black text-slate-600 transition hover:bg-primary-50 hover:text-primary-700">
+									<a href="/marketplace/toko/{p.majelisId}" class="mb-1.5 inline-flex max-w-full items-center gap-1 truncate rounded-full bg-slate-100 px-2 py-1 text-[10px] sm:w-fit sm:text-[11px] font-black text-slate-600 transition hover:bg-primary-50 hover:text-primary-700">
 										<Store size={11} /> {p.tokoNama}
 									</a>
 								{/if}
-								<h3 class="min-h-11 text-[15px] leading-snug font-black text-slate-800">{p.nama}</h3>
+								<h3 class="line-clamp-2 min-h-10 text-sm leading-snug font-black text-slate-800 sm:min-h-11 sm:text-[15px]">{p.nama}</h3>
 								<div class="mt-2 flex items-center justify-between gap-2">
 									<p class="text-xs font-medium text-slate-500">Stok {p.stok} {p.satuan}</p>
 									{#if habis}<Badge tone="red">Habis</Badge>{:else if p.stok <= p.min}<Badge tone="amber">Terbatas</Badge>{/if}
 								</div>
-								<div class="mt-4 flex items-baseline gap-1"><p class="num text-xl font-black tracking-tight text-brand-800">{rupiah(p.jual)}</p><span class="text-xs font-medium text-slate-400">/ {p.satuan}</span></div>
+								<div class="mt-2 flex flex-wrap items-baseline gap-x-1 sm:mt-4"><p class="num text-base font-black tracking-tight text-brand-800 sm:text-xl">{rupiah(p.jual)}</p><span class="text-xs font-medium text-slate-400">/ {p.satuan}</span></div>
 								{#if qty}
-									<div class="mt-4 flex items-center justify-between rounded-2xl border border-primary-300 bg-primary-50 p-1.5 shadow-[0_3px_0_0_#a8dbc0]">
+									<div class="mt-3 flex items-center justify-between rounded-2xl border border-primary-300 bg-primary-50 p-1 sm:mt-4 sm:p-1.5 shadow-[0_3px_0_0_#a8dbc0]">
 										<Button variant="ghost" size="icon-sm" aria-label="Kurangi {p.nama}" onclick={() => ubah(p, -1)}>−</Button>
-										<span class="num min-w-24 text-center text-sm font-black text-primary-900">{qty} <span class="font-bold text-primary-600">{p.satuan}</span></span>
+										<span class="num text-center text-sm font-black text-primary-900">{qty} <span class="font-bold text-primary-600 max-sm:hidden">{p.satuan}</span></span>
 										<Button variant="ghost" size="icon-sm" aria-label="Tambah {p.nama}" disabled={qty >= p.stok} onclick={() => tambah(p)}>+</Button>
 									</div>
 								{:else}
-									<Button fullWidth class="mt-4" variant="outline" disabled={habis} onclick={() => tambah(p)}><ShoppingBag size={16} /> {habis ? 'Stok habis' : 'Tambah ke keranjang'}</Button>
+									<Button fullWidth size="sm" class="mt-3 sm:mt-4" variant="outline" disabled={habis} onclick={() => tambah(p)}><ShoppingBag size={16} /> {habis ? 'Habis' : 'Tambah'}</Button>
 								{/if}
 							</div>
 						</article>
@@ -494,7 +496,7 @@
 		background: rgb(255 255 255 / 0.45);
 	}
 	.product-emoji {
-		font-size: clamp(4rem, 8vw, 5.5rem);
+		font-size: clamp(3rem, 8vw, 5.5rem);
 		line-height: 1;
 		filter: drop-shadow(0 12px 10px rgb(76 64 36 / 0.14));
 		transition: transform 180ms ease;
