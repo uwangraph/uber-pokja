@@ -7,6 +7,7 @@
 	import { majelis } from '$lib/data.js';
 	import { tokoState, tokoAktif, katalogToko } from '$lib/marketplace.svelte.js';
 	import { kurangiStokMT } from '$lib/inventori.svelte.js';
+	import { metodeBayar } from '$lib/pembayaran.js';
 	import { sudahMasukPembeli, urlMasuk } from '$lib/pembeli.js';
 
 	const produk = $derived(katalogToko(tokoState.majelisId));
@@ -43,7 +44,7 @@
 		let orderPertama = null;
 		for (const [majelisId, barisToko] of perToko) {
 			const tokoNama = barisToko[0]?.tokoNama ?? toko?.nama ?? majelis.find((m) => m.id === majelisId)?.nama ?? '';
-			const order = { id: 'MP-' + Date.now() + (urutan++), dibuatPada: new Date().toISOString(), majelisId, tokoNama, pembeli: { ...pembeli }, items: barisToko.map((p) => ({ id: p.id, nama: p.nama, qty: p.qty, satuan: p.satuan, harga: p.jual })), total: barisToko.reduce((s, p) => s + p.qty * p.jual, 0), pengiriman, pembayaran, status: pembayaran === 'tunai' ? 'Menunggu diproses' : 'Menunggu pembayaran' };
+			const order = { id: 'MP-' + Date.now() + (urutan++), dibuatPada: new Date().toISOString(), majelisId, tokoNama, pembeli: { ...pembeli }, items: barisToko.map((p) => ({ id: p.id, nama: p.nama, qty: p.qty, satuan: p.satuan, harga: p.jual })), total: barisToko.reduce((s, p) => s + p.qty * p.jual, 0), pengiriman, pembayaran, status: pembayaran === 'cod' ? 'Menunggu diproses' : 'Menunggu pembayaran' };
 			pesanan.unshift(order);
 			orderPertama ??= order;
 			// Pesanan langsung mengurangi stok titipan MT (bukan stok Gudang Pusat).
@@ -81,7 +82,7 @@
 					{/each}
 					<div class="bg-slate-50 px-5 py-3 text-sm font-bold text-slate-500">Pengiriman: <span class="text-slate-800">{pengiriman === 'antar' ? 'Diantar ke alamat' : 'Ambil di UBER POKJA'}</span></div>
 				</section>
-				<section class="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm"><h2 class="font-black">Metode pembayaran</h2><div class="mt-4"><Select label="Pilih pembayaran" options={[{ value: 'transfer', label: 'Transfer bank' }, { value: 'tunai', label: 'Tunai saat pengambilan' }]} bind:value={pembayaran} /></div>{#if pembayaran === 'tunai'}<p class="mt-4 rounded-xl bg-emerald-50 px-3 py-3 text-sm font-bold text-emerald-900">Bayar tunai saat mengambil pesanan di UBER POKJA.</p>{:else}<p class="mt-4 rounded-xl bg-amber-50 px-3 py-3 text-sm font-bold text-amber-900">Instruksi rekening dan konfirmasi pembayaran tersedia melalui Chat bantuan setelah pesanan dibuat.</p>{/if}</section>
+				<section class="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm"><h2 class="font-black">Metode pembayaran</h2><div class="mt-4"><Select label="Pilih pembayaran" options={metodeBayar} bind:value={pembayaran} /></div>{#if pembayaran === 'cod'}<p class="mt-3 rounded-xl bg-emerald-50 px-3 py-2.5 text-sm font-medium text-emerald-900">Siapkan uang tunai <strong class="num">{rupiah(total)}</strong>. Bayar ke {pengiriman === 'antar' ? 'kurir saat pesanan tiba' : 'petugas saat mengambil pesanan'}.</p>{:else}<p class="mt-3 rounded-xl bg-primary-50 px-3 py-2.5 text-sm font-medium text-primary-900">Setelah membuat pesanan, Anda mendapat nomor Virtual Account. Bayar dalam 60 menit.</p>{/if}<div></div>{#if pembayaran === 'tunai'}<p class="mt-4 rounded-xl bg-emerald-50 px-3 py-3 text-sm font-bold text-emerald-900">Bayar tunai saat mengambil pesanan di UBER POKJA.</p>{:else}<p class="mt-4 rounded-xl bg-amber-50 px-3 py-3 text-sm font-bold text-amber-900">Instruksi rekening dan konfirmasi pembayaran tersedia melalui Chat bantuan setelah pesanan dibuat.</p>{/if}</section>
 			</div>
 			<section class="h-fit rounded-3xl border border-slate-200 bg-white p-5 shadow-sm lg:sticky lg:top-5"><h2 class="font-black">Ringkasan pembayaran</h2><p class="mt-1 text-sm font-medium text-slate-500">Pastikan pesanan sudah benar.</p><div class="mt-5 flex justify-between border-t border-slate-200 pt-4"><span class="font-bold text-slate-500">Total produk</span><strong class="num text-xl font-black text-primary-800">{rupiah(total)}</strong></div><p class="mt-2 text-xs font-bold text-slate-400">Biaya pengiriman akan dikonfirmasi sesuai alamat atau metode pengambilan.</p><Button fullWidth size="lg" class="mt-5" onclick={buatPesanan}><ShoppingBag size={17} /> Buat pesanan</Button></section>
 		</div>
