@@ -75,8 +75,9 @@
 	);
 	// Tombol Menu hanya perlu kalau ada menu yang tidak muat di bottom bar.
 	const adaMenuLain = $derived(visibleNav.length > bottomNav.length);
-	// Halaman aktif yang tidak ada di bottom bar (mis. Laporan): tombol Menu ikut
-	// aktif dan menampilkan ikon + nama halaman itu, jadi posisi tetap terlihat.
+	// Halaman aktif yang tidak ada di bottom bar (mis. Laporan): tombol Menu tetap
+	// berikon & berlabel "Menu", tetapi ikut aktif (hijau). Nama halaman terlihat di
+	// judul halaman dan disorot di dalam sheet Menu.
 	const aktifDiMenu = $derived(bottomNav.some((n) => active(n.href)) ? null : visibleNav.find((n) => active(n.href)) ?? null);
 	const activeHref = $derived(visibleNav.find((n) => active(n.href))?.href ?? '');
 	const bottomNav = $derived(
@@ -236,8 +237,8 @@
 			{/each}
 			{#if adaMenuLain}
 			<button class="flex min-h-16 min-w-0 flex-col items-center justify-center gap-1 text-[11px] font-black {aktifDiMenu ? 'text-brand-700' : 'text-slate-400'}" aria-label={aktifDiMenu ? `Menu, sedang di ${aktifDiMenu.label}` : 'Menu'} onclick={() => (menuOpen = true)}>
-				<span class="grid h-7 w-12 place-items-center rounded-full transition {aktifDiMenu ? 'bg-brand-50' : ''}"><Icon name={aktifDiMenu?.icon ?? 'menu'} class="size-5" strokeWidth={2.5} /></span>
-				<span class="max-w-full truncate px-1">{aktifDiMenu ? (aktifDiMenu.labelPendek ?? aktifDiMenu.label) : 'Menu'}</span>
+				<span class="grid h-7 w-12 place-items-center rounded-full transition {aktifDiMenu ? 'bg-brand-50' : ''}"><Icon name="menu" class="size-5" strokeWidth={2.5} /></span>
+				Menu
 			</button>
 			{/if}
 		</div>
