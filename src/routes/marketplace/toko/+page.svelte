@@ -1,7 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { MapPin, Store, ChevronRight, ChevronLeft, LayoutGrid, LocateFixed, Loader2 } from 'lucide-svelte';
-	import { showToast } from '@khwarizmi/svelte-ui';
+	import { Button, showToast } from '@khwarizmi/svelte-ui';
 	import { majelis } from '$lib/data.js';
 	import { inventori } from '$lib/inventori.svelte.js';
 	import { pilihToko, tokoTerdekat } from '$lib/marketplace.svelte.js';
@@ -15,8 +15,12 @@
 	const daftar = $derived(
 		urutanJarak
 			? urutanJarak.map((t) => ({ ...t, jenisProduk: dasar.find((d) => d.id === t.id)?.jenisProduk ?? 0 }))
-			: dasar
+			: [...dasar].sort((a, b) => b.jenisProduk - a.jenisProduk) // toko yang punya stok tampil duluan
 	);
+	// 70+ toko: tampilkan bertahap agar daftar tidak terlalu panjang di HP.
+	const PER_HALAMAN = 15;
+	let batas = $state(PER_HALAMAN);
+	const tampil = $derived(daftar.slice(0, batas));
 
 	function cariTerdekat() {
 		if (!navigator.geolocation) {
@@ -67,7 +71,7 @@
 			{#if mencariLokasi}<Loader2 size={17} class="animate-spin" /> Mencari lokasi Anda…{:else}<LocateFixed size={17} /> Cari toko terdekat{/if}
 		</button>
 
-		<div class="mt-6 space-y-3">
+		<div class="mt-6 space-y-2.5 sm:space-y-3">
 			<button
 				type="button"
 				class="flex w-full items-center gap-4 rounded-3xl border border-dashed border-primary-300 bg-primary-50 p-4 text-left transition hover:border-primary-400"
@@ -80,24 +84,29 @@
 				</div>
 				<ChevronRight class="shrink-0 text-primary-300" size={20} />
 			</button>
-			{#each daftar as m, i (m.id)}
+			{#each tampil as m, i (m.id)}
 				<button
 					type="button"
-					class="flex w-full items-center gap-4 rounded-3xl border p-4 text-left shadow-sm transition hover:border-primary-300 hover:shadow-md {urutanJarak && i === 0 ? 'border-primary-400 bg-primary-50/40 shadow-[0_3px_0_0_var(--primary-300)]' : 'border-slate-200 bg-white'}"
+					class="flex w-full items-center gap-3 rounded-2xl border p-3 text-left shadow-sm sm:gap-4 sm:rounded-3xl sm:p-4 transition hover:border-primary-300 hover:shadow-md {urutanJarak && i === 0 ? 'border-primary-400 bg-primary-50/40 shadow-[0_3px_0_0_var(--primary-300)]' : 'border-slate-200 bg-white'}"
 					onclick={() => kunjungi(m)}
 				>
-					<span class="grid size-12 shrink-0 place-items-center rounded-2xl bg-primary-50 text-primary-700"><Store size={22} /></span>
+					<span class="grid size-10 shrink-0 place-items-center rounded-xl bg-primary-50 text-primary-700 sm:size-12 sm:rounded-2xl"><Store size={20} /></span>
 					<div class="min-w-0 flex-1">
 						<div class="flex flex-wrap items-center gap-2">
-							<p class="font-black text-slate-800">{m.nama}</p>
+							<p class="truncate font-black text-slate-800">{m.nama}</p>
 							{#if urutanJarak && i === 0}<span class="rounded-full bg-primary-100 px-2 py-0.5 text-[10px] font-black text-primary-800">Terdekat</span>{/if}
 						</div>
-						<p class="mt-0.5 flex items-center gap-1 text-xs font-bold text-slate-400"><MapPin size={13} /> Desa {m.desa}{urutanJarak ? ` · ${m.jarakKm.toFixed(1)} km` : ''}</p>
-						<p class="mt-1 text-xs font-bold text-slate-400">{m.jenisProduk} produk tersedia</p>
+						<p class="mt-0.5 flex items-center gap-1 truncate text-xs font-bold text-slate-400"><MapPin size={13} class="shrink-0" /> Desa {m.desa}{urutanJarak ? ` · ${m.jarakKm.toFixed(1)} km` : ''} · <span class={m.jenisProduk ? 'text-primary-700' : ''}>{m.jenisProduk ? `${m.jenisProduk} produk` : 'Belum ada stok'}</span></p>
 					</div>
 					<ChevronRight class="shrink-0 text-slate-300" size={20} />
 				</button>
 			{/each}
+			{#if daftar.length > batas}
+				<div class="flex flex-col items-center gap-2 pt-2">
+					<p class="text-xs font-bold text-slate-400">Menampilkan {tampil.length} dari {daftar.length} toko</p>
+					<Button variant="outline" onclick={() => (batas += PER_HALAMAN)}>Tampilkan lebih banyak</Button>
+				</div>
+			{/if}
 		</div>
 	</div>
 </main>

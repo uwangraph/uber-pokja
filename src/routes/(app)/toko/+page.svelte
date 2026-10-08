@@ -7,7 +7,7 @@
 	import Stat from '$lib/components/Stat.svelte';
 	import { majelis, penjualan } from '$lib/data.js';
 	import { inventori } from '$lib/inventori.svelte.js';
-	import { rupiah } from '$lib/format.js';
+	import { rupiah, tanggal } from '$lib/format.js';
 
 	let user = $state(null);
 	let pesananMasuk = $state([]);
@@ -66,14 +66,15 @@
 	<Card padding="none" class="overflow-hidden">
 		<ul class="divide-y divide-slate-100">
 			{#each pesananToko as p}
-				<li class="flex items-center justify-between gap-4 p-4 text-sm">
-					<div class="min-w-0 flex-1">
-						<p class="font-black text-slate-800">{p.id}</p>
-						<p class="truncate text-xs font-bold text-slate-400">{p.pembeli?.nama} · {p.items.map((i) => `${i.nama} × ${i.qty}`).join(', ')}</p>
+				<!-- Dua baris: [no. pesanan .... total] / [pembeli · barang .... status] -->
+				<li class="space-y-1.5 px-4 py-3.5 text-sm">
+					<div class="flex items-center justify-between gap-3">
+						<p class="truncate font-black text-slate-800">{p.id}</p>
+						<span class="num shrink-0 font-black">{rupiah(p.total)}</span>
 					</div>
-					<div class="flex shrink-0 items-center gap-3">
-						<span class="num font-black">{rupiah(p.total)}</span>
-						<Badge tone="amber">{p.status}</Badge>
+					<div class="flex items-center justify-between gap-3">
+						<p class="min-w-0 truncate text-xs font-bold text-slate-400">{p.pembeli?.nama} · {p.items.map((i) => `${i.nama} × ${i.qty}`).join(', ')}</p>
+						<div class="shrink-0"><Badge tone={p.status === 'Selesai' ? 'green' : p.status === 'Dibatalkan' ? 'red' : 'amber'}>{p.status}</Badge></div>
 					</div>
 				</li>
 			{/each}
@@ -91,7 +92,7 @@
 				<li class="flex items-center justify-between gap-4 p-4 text-sm">
 					<div>
 						<p class="font-black text-slate-800">{t.no}</p>
-						<p class="text-xs font-bold text-slate-400">{t.tgl} · {t.item} item</p>
+						<p class="text-xs font-bold text-slate-400">{tanggal(t.tgl)} · {t.item} item</p>
 					</div>
 					<div class="flex items-center gap-3">
 						<span class="num font-black">{rupiah(t.total)}</span>

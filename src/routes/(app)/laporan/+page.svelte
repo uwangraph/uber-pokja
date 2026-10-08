@@ -56,8 +56,9 @@
 			<div class="hidden lg:block **:[[role=tablist]]:w-full **:[[role=tab]]:justify-start">
 				<Tabs tabs={tabJenis} bind:value={jenis} orientation="vertical" ariaLabel="Jenis laporan" />
 			</div>
+			<!-- HP: 4 jenis tidak muat sebagai tab, jadi pakai dropdown -->
 			<div class="lg:hidden">
-				<Tabs tabs={tabJenis} bind:value={jenis} ariaLabel="Jenis laporan" />
+				<Select options={tabJenis.map(({ value, label }) => ({ value, label }))} bind:value={jenis} aria-label="Jenis laporan" />
 			</div>
 		</Card>
 		<Card padding="sm">

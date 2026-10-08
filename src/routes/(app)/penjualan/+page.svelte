@@ -152,30 +152,33 @@
 
 			<!-- Jumlah kolom mengikuti lebar area produk, bukan lebar layar -->
 			{#if tersedia.length}
-				<ul class="mt-4 grid gap-3 @lg:grid-cols-2 @3xl:grid-cols-3">
+				<ul class="mt-4 grid gap-2.5 @lg:grid-cols-2 @lg:gap-3 @3xl:grid-cols-3">
 					{#each tersedia as p (p.id)}
 						{@const qty = keranjang[p.id] ?? 0}
 						{@const habis = p.stok === 0}
+						<!-- HP: baris ringkas (info kiri, tombol kanan); area lebar: kartu kolom -->
 						<li
-							class="flex flex-col rounded-2xl border p-4 transition {qty
+							class="flex items-center gap-3 rounded-2xl border p-3 transition @lg:flex-col @lg:items-stretch @lg:p-4 {qty
 								? 'border-primary-400 bg-primary-50 shadow-[0_3px_0_0_var(--primary-300)]'
 								: 'border-slate-200 bg-white shadow-[0_3px_0_0_#E2E8F0]'} {habis ? 'opacity-55' : ''}"
 						>
-							<p class="text-sm leading-snug font-black text-slate-800">{p.nama}</p>
-							<div class="mt-1.5 flex flex-1 flex-wrap items-start gap-x-2 gap-y-1">
-								<p class="num text-xs leading-5 font-bold text-slate-400">Stok {p.stok} {p.satuan}</p>
-								{#if habis}<Badge tone="red">Habis</Badge>{:else if p.stok <= p.min}<Badge tone="amber">Menipis</Badge>{/if}
+							<div class="min-w-0 flex-1">
+								<p class="text-sm leading-snug font-black text-slate-800">{p.nama}</p>
+								<div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
+									<p class="num text-sm font-black whitespace-nowrap text-primary-800">{rupiah(p.jual)}</p>
+									<p class="num text-xs font-bold text-slate-400">· Stok {p.stok}</p>
+									{#if habis}<Badge tone="red">Habis</Badge>{:else if p.stok <= p.min}<Badge tone="amber">Menipis</Badge>{/if}
+								</div>
 							</div>
-							<p class="num mt-3 text-base font-black whitespace-nowrap">{rupiah(p.jual)}</p>
-							<div class="mt-3">
+							<div class="shrink-0 @lg:mt-1">
 								{#if qty}
 									<div class="flex items-center justify-between gap-1 rounded-2xl border border-slate-200 bg-white p-1">
 										<Button variant="ghost" size="icon-sm" aria-label="Kurangi {p.nama}" onclick={() => ubah(p, -1)}><Icon name="minus" class="size-4" strokeWidth={3} /></Button>
-										<span class="num text-sm font-black">{qty} <span class="font-bold text-slate-400">{p.satuan}</span></span>
+										<span class="num min-w-7 text-center text-sm font-black">{qty}</span>
 										<Button size="icon-sm" aria-label="Tambah {p.nama}" disabled={qty >= p.stok} onclick={() => ubah(p, 1)}><Icon name="plus" class="size-4" strokeWidth={3} /></Button>
 									</div>
 								{:else}
-									<Button variant="outline" size="sm" fullWidth disabled={habis} onclick={() => ubah(p, 1)} aria-label="Tambah {p.nama}">
+									<Button variant="outline" size="sm" class="@lg:w-full" disabled={habis} onclick={() => ubah(p, 1)} aria-label="Tambah {p.nama}">
 										<Icon name="plus" class="size-4" strokeWidth={3} /> Tambah
 									</Button>
 								{/if}
@@ -246,7 +249,7 @@
 					<h2 class="mt-0.5 font-black">Pembayaran</h2>
 					<p class="mt-1 text-sm font-bold text-slate-400">Dibayar penuh saat transaksi.</p>
 				</div>{/if}
-				<p class="flex items-center gap-1.5 text-xs font-bold text-slate-400"><Icon name="info" class="size-3.5" /> {pemasaran ? 'Stok berkurang setelah Gudang menyerahkan barang.' : 'Penjualan langsung langsung mengurangi stok.'}</p>
+				<p class="flex items-center gap-1.5 text-xs font-bold text-slate-400"><Icon name="info" class="size-3.5" /> {pemasaran ? 'Stok berkurang setelah Gudang menyerahkan barang.' : 'Penjualan langsung mengurangi stok.'}</p>
 				<Button fullWidth size="lg" class="mt-2" disabled={!baris.length} onclick={simpan}><Icon name="check" class="size-4" strokeWidth={3} /> {pemasaran ? 'Simpan pesanan' : 'Simpan transaksi'}</Button>
 			</div>
 		</Card>

@@ -56,3 +56,7 @@ export function katalogToko(majelisId = null) {
 			return { id: `${s.majelisId}-${s.produkId}`, majelisId: s.majelisId, produkId: s.produkId, tokoNama: toko?.nama ?? '', nama: s.nama, satuan: s.satuan, jual: s.jual, stok: s.stok, min: 3 };
 		});
 }
+
+// Emoji produk per produkId (id katalog berformat "majelisId-produkId").
+const EMOJI = { 1: '🍚', 2: '🫙', 3: '🧂', 4: '🥚', 5: '🌾', 6: '🍜', 7: '🍵' };
+export const emojiProduk = (p) => EMOJI[p?.produkId ?? p?.id] ?? '🛍️';

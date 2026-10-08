@@ -54,7 +54,7 @@
 				<span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-white shadow-sm ring-1 ring-brand-900/10"><img src="/logo.png" alt="UBER POKJA" class="size-8" /></span>
 				<span class="min-w-0 leading-tight">
 					<span class="block text-sm font-black tracking-tight text-brand-900">UBER Market</span>
-					<span class="block truncate text-[11px] font-bold text-slate-500">Marketplace UBER POKJA</span>
+					<span class="block truncate text-[11px] font-bold text-slate-500 max-sm:hidden">Marketplace UBER POKJA</span>
 				</span>
 			</a>
 			<div class="flex shrink-0 items-center gap-1 sm:gap-2">

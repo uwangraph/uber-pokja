@@ -107,7 +107,7 @@
 					<Alert tone="warning" title="Mode simulasi">Tidak ada uang yang benar-benar ditransfer. Gunakan tombol di bawah untuk mencoba alurnya.</Alert>
 
 					<div class="grid gap-2">
-						<Button fullWidth size="lg" onclick={bayar}><CheckCircle2 size={18} /> Simulasikan pembayaran berhasil</Button>
+						<Button fullWidth size="lg" onclick={bayar}><CheckCircle2 size={18} /> Simulasi bayar berhasil</Button>
 						<Button fullWidth variant="outline" onclick={batalkan}><XCircle size={17} /> Batalkan pesanan</Button>
 					</div>
 				{/if}
