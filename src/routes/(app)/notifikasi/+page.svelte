@@ -32,15 +32,17 @@
 			<Tabs
 				bind:value={filter}
 				ariaLabel="Filter notifikasi"
+				fill
 				items={[
 					{ value: 'semua', label: 'Semua', count: notifSaya.length },
-					{ value: 'baru', label: 'Belum dibaca', count: baru }
+					{ value: 'baru', label: 'Baru', count: baru }
 				]}
 			/>
 		{/snippet}
 		{#snippet action()}
-			<Button variant="outline" disabled={!baru} onclick={() => tandaiSemua(role)} aria-label="Tandai semua dibaca" title="Tandai semua dibaca">
-				<Icon name="check" class="size-4" strokeWidth={3} /> <span class="hidden sm:inline">Tandai semua dibaca</span>
+			<Button variant="outline" size="icon-lg" class="sm:hidden" disabled={!baru} onclick={() => tandaiSemua(role)} aria-label="Tandai semua dibaca" title="Tandai semua dibaca"><Icon name="check" class="size-4" strokeWidth={3} /></Button>
+			<Button variant="outline" class="hidden h-12 sm:inline-flex" disabled={!baru} onclick={() => tandaiSemua(role)}>
+				<Icon name="check" class="size-4" strokeWidth={3} /> Tandai semua dibaca
 			</Button>
 		{/snippet}
 	</Toolbar>
