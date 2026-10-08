@@ -5,4 +5,4 @@
 	const map = { brand: 'primary', gold: 'amber', red: 'red', gray: 'neutral' };
 </script>
 
-<StatCard {label} {value} trendLabel={hint || undefined} icon={ikon[icon]} tone={map[tone]} class="stat-kartu h-full" />
+<StatCard {label} {value} trendLabel={hint || undefined} icon={ikon[icon]} tone={map[tone]} class="h-full" />
