@@ -2,6 +2,7 @@
 	import { Button, Card, EmptyState } from '@khwarizmi/svelte-ui';
 	import { CircleCheck } from 'lucide-svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
+	import TombolKembali from '$lib/components/TombolKembali.svelte';
 	import Tabs from '$lib/components/Tabs.svelte';
 	import Toolbar from '$lib/components/Toolbar.svelte';
 	import Icon from '$lib/components/Icon.svelte';
@@ -20,6 +21,8 @@
 </script>
 
 <svelte:head><title>Notifikasi · UBER POKJA</title></svelte:head>
+
+<TombolKembali />
 
 <PageHeader title="Notifikasi" subtitle="Pengingat stok, piutang, pembelian, dan transaksi terbaru." />
 
