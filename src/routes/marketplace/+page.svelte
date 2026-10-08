@@ -206,7 +206,7 @@
 					<div>
 						<h1 class="max-w-2xl text-[2.4rem] leading-[1.09] font-black tracking-tight sm:text-5xl lg:text-[3.4rem]">Belanja sembako jadi <span class="text-gold-400">lebih dekat.</span></h1>
 						<p class="mt-5 max-w-lg text-sm leading-7 font-medium text-brand-100 sm:text-base">Marketplace kebutuhan harian untuk masyarakat dan jaringan Majelis Taklim. Harga jelas, pesanan mudah, dan stok terhubung ke UBER POKJA.</p>
-						<Button variant="warning" size="lg" class="mt-7        " onclick={() => document.getElementById('katalog')?.scrollIntoView({ behavior: 'smooth' })}>Jelajahi produk <ArrowRight size={17} strokeWidth={2.5} /></Button>
+						<Button variant="warning" size="lg" class="mt-7" onclick={() => document.getElementById('katalog')?.scrollIntoView({ behavior: 'smooth' })}>Jelajahi produk <ArrowRight size={17} strokeWidth={2.5} /></Button>
 					</div>
 					<div class="hero-art relative mx-auto w-full max-w-md" aria-hidden="true">
 						<div class="hero-orbit"></div>
@@ -220,15 +220,15 @@
 		</section>
 
 		<section class="mx-auto grid max-w-6xl gap-3 px-4 pt-5 sm:grid-cols-3 sm:px-6">
-			<Card padding="none" class="flex min-h-[78px] items-center gap-3    ">
+			<Card padding="none" class="flex min-h-[78px] items-center gap-3">
 				<span class="grid size-10 shrink-0 place-items-center rounded-[13px] bg-[#eaf4e9] text-[#176846]"><PackageCheck size={19} /></span>
 				<div class="min-w-0"><strong class="block text-[13px] text-[#19392b]">Produk pilihan</strong><small class="mt-0.5 block text-[11px] text-[#66776d]">Kebutuhan harian tersedia</small></div>
 			</Card>
-			<Card padding="none" class="flex min-h-[78px] items-center gap-3    ">
+			<Card padding="none" class="flex min-h-[78px] items-center gap-3">
 				<span class="grid size-10 shrink-0 place-items-center rounded-[13px] bg-[#eaf4e9] text-[#176846]"><ShieldCheck size={19} /></span>
 				<div class="min-w-0"><strong class="block text-[13px] text-[#19392b]">Harga transparan</strong><small class="mt-0.5 block text-[11px] text-[#66776d]">Terlihat sebelum memesan</small></div>
 			</Card>
-			<Card padding="none" class="flex min-h-[78px] items-center gap-3    ">
+			<Card padding="none" class="flex min-h-[78px] items-center gap-3">
 				<span class="grid size-10 shrink-0 place-items-center rounded-[13px] bg-[#eaf4e9] text-[#176846]"><MapPin size={19} /></span>
 				<div class="min-w-0"><strong class="block text-[13px] text-[#19392b]">Dari Tenjolaya</strong><small class="mt-0.5 block text-[11px] text-[#66776d]">Belanja dari usaha bersama</small></div>
 			</Card>
@@ -275,12 +275,12 @@
 								<div class="mt-4 flex items-baseline gap-1"><p class="num text-xl font-black tracking-tight text-brand-800">{rupiah(p.jual)}</p><span class="text-xs font-medium text-slate-400">/ {p.satuan}</span></div>
 								{#if qty}
 									<div class="mt-4 flex items-center justify-between rounded-2xl border border-primary-300 bg-primary-50 p-1.5 shadow-[0_3px_0_0_#a8dbc0]">
-										<Button variant="ghost" size="icon-sm" class="" aria-label="Kurangi {p.nama}" onclick={() => ubah(p, -1)}>−</Button>
+										<Button variant="ghost" size="icon-sm" aria-label="Kurangi {p.nama}" onclick={() => ubah(p, -1)}>−</Button>
 										<span class="num min-w-24 text-center text-sm font-black text-primary-900">{qty} <span class="font-bold text-primary-600">{p.satuan}</span></span>
-										<Button variant="ghost" size="icon-sm" class="" aria-label="Tambah {p.nama}" disabled={qty >= p.stok} onclick={() => tambah(p)}>+</Button>
+										<Button variant="ghost" size="icon-sm" aria-label="Tambah {p.nama}" disabled={qty >= p.stok} onclick={() => tambah(p)}>+</Button>
 									</div>
 								{:else}
-									<Button fullWidth class="mt-4         " variant="outline" disabled={habis} onclick={() => tambah(p)}><ShoppingBag size={16} /> {habis ? 'Stok habis' : 'Tambah ke keranjang'}</Button>
+									<Button fullWidth class="mt-4" variant="outline" disabled={habis} onclick={() => tambah(p)}><ShoppingBag size={16} /> {habis ? 'Stok habis' : 'Tambah ke keranjang'}</Button>
 								{/if}
 							</div>
 						</article>
