@@ -1,6 +1,6 @@
 <script>
 	import { browser } from '$app/environment';
-	import { Button, Card, Modal, Select, showToast } from '@khwarizmi/svelte-ui';
+	import { Button, Card, Modal, Select, Stepper, showToast } from '@khwarizmi/svelte-ui';
 	import { Camera, CheckCircle2, MapPin, PackageCheck, Truck, Loader2, RefreshCw, UserPlus } from 'lucide-svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Badge from '$lib/components/Badge.svelte';
@@ -45,6 +45,9 @@
 			.filter((item) => filter === 'semua' || item.status === filter)
 	);
 	const tone = { 'Siap dikirim': 'amber', 'Dalam perjalanan': 'blue', Selesai: 'green' };
+	// Langkah alur pengiriman; status Selesai = semua langkah tuntas.
+	const langkah = [{ label: 'Siap' }, { label: 'Diantar' }, { label: 'Diterima' }];
+	const posisi = { 'Siap dikirim': 0, 'Dalam perjalanan': 1, Selesai: 3 };
 	function tugaskan(item, kurirId) {
 		item.kurirId = kurirId ? parseInt(kurirId) : null;
 		kiriman = [...kiriman];
@@ -173,10 +176,11 @@
 		{@const kurirItem = akun.find((a) => a.id === item.kurirId)}
 		<Card padding="lg" class="flex flex-col">
 			<div class="flex items-start justify-between gap-3"><div><p class="text-xs font-black tracking-widest text-primary-600 uppercase">{item.id} · {item.pesanan}</p><h2 class="mt-1 font-black">{item.penerima}</h2></div><Badge tone={tone[item.status]}>{item.status}</Badge></div>
+			<Stepper class="mt-5" steps={langkah} current={posisi[item.status]} />
 			<div class="mt-5 space-y-3 rounded-2xl bg-slate-50 p-4 text-sm"><p class="flex items-start gap-2 font-bold text-slate-600"><MapPin class="mt-0.5 shrink-0 text-primary-700" size={17} /> <span>{item.alamat}<br /><span class="text-slate-400">{item.hp}</span></span></p><p class="flex items-start gap-2 font-bold text-slate-600"><PackageCheck class="mt-0.5 shrink-0 text-primary-700" size={17} /> {item.barang}</p></div>
 
 			{#if bisaTugaskan && item.status === 'Siap dikirim'}
-				<div class="mt-3 max-w-xs"><Select label="Tugaskan kurir" placeholder="Pilih kurir" options={daftarKurir.map((k) => ({ value: String(k.id), label: k.nama }))} value={item.kurirId ? String(item.kurirId) : ''} onChange={(v) => tugaskan(item, v)} /></div>
+				<div class="mt-3 max-w-xs"><Select label={kurirItem ? 'Ganti kurir' : 'Tugaskan kurir'} placeholder="Pilih kurir" options={daftarKurir.map((k) => ({ value: String(k.id), label: k.nama }))} value={item.kurirId ? String(item.kurirId) : ''} onChange={(v) => tugaskan(item, v)} /></div>
 			{:else if kurirItem}
 				<p class="mt-3 flex items-center gap-2 text-sm font-bold text-slate-500"><UserPlus size={16} class="text-primary-700" /> Kurir: {kurirItem.nama}</p>
 			{/if}
@@ -185,6 +189,8 @@
 			<div class="mt-5 flex justify-end gap-2">
 				{#if item.status === 'Siap dikirim' && isKurir}<Button onclick={() => mulai(item)}><Truck size={17} /> Mulai antar</Button>{/if}
 				{#if item.status === 'Siap dikirim' && !isKurir && !kurirItem}<span class="text-sm font-bold text-amber-600">Belum ditugaskan ke kurir</span>{/if}
+				{#if item.status === 'Siap dikirim' && !isKurir && kurirItem}<span class="inline-flex items-center gap-2 text-sm font-bold text-slate-500"><Loader2 size={16} class="animate-spin text-primary-700" /> Menunggu {kurirItem.nama} mulai antar</span>{/if}
+				{#if item.status === 'Dalam perjalanan' && !isKurir}<span class="inline-flex items-center gap-2 text-sm font-bold text-blue-600"><Truck size={16} /> Sedang diantar {kurirItem?.nama ?? ''}</span>{/if}
 				{#if item.status === 'Dalam perjalanan' && isKurir}<Button onclick={() => bukaKonfirmasi(item)}><CheckCircle2 size={17} /> Konfirmasi diterima</Button>{/if}
 				{#if item.status === 'Selesai'}<span class="inline-flex items-center gap-2 text-sm font-black text-primary-700"><CheckCircle2 size={18} /> Sudah diserahkan</span>{/if}
 			</div>
