@@ -19,6 +19,8 @@
 
 <svelte:head><title>Profil · UBER POKJA</title></svelte:head>
 
+<Button variant="ghost" size="sm" class="mb-3 -ml-2 lg:hidden" onclick={() => history.back()}><Icon name="chevron" class="size-4 rotate-180" /> Kembali</Button>
+
 <PageHeader eyebrow="Akun" title="Profil saya" subtitle="Informasi akun dan menu yang bisa Anda akses." />
 
 {#if user}

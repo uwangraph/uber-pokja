@@ -78,6 +78,8 @@
 	// Halaman aktif yang tidak ada di bottom bar (mis. Laporan): tombol Menu tetap
 	// berikon & berlabel "Menu", tetapi ikut aktif (hijau). Nama halaman terlihat di
 	// judul halaman dan disorot di dalam sheet Menu.
+	// Profil dibuka dari avatar, jadi diperlakukan sebagai halaman terpisah tanpa bottom nav.
+	const tanpaNavBawah = $derived(page.url.pathname.startsWith('/profil'));
 	const aktifDiMenu = $derived(bottomNav.some((n) => active(n.href)) ? null : visibleNav.find((n) => active(n.href)) ?? null);
 	const activeHref = $derived(visibleNav.find((n) => active(n.href))?.href ?? '');
 	const bottomNav = $derived(
@@ -182,7 +184,7 @@
 			</div>
 		</header>
 
-		<main class="flex-1 px-4 pt-5 pb-28 sm:px-6 lg:px-8 lg:pt-8 lg:pb-12">
+		<main class="flex-1 px-4 pt-5 sm:px-6 lg:px-8 lg:pt-8 lg:pb-12 {tanpaNavBawah ? 'pb-8' : 'pb-28'}">
 			<div class="mx-auto max-w-6xl">
 				{@render children()}
 			</div>
@@ -224,7 +226,8 @@
 		</div>
 	</Drawer>
 
-	<!-- Bottom nav HP -->
+	<!-- Bottom nav HP (disembunyikan di halaman Profil) -->
+	{#if !tanpaNavBawah}
 	<nav class="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md lg:hidden" aria-label="Menu cepat">
 		<div class="grid" style="grid-template-columns: repeat({bottomNav.length + (adaMenuLain ? 1 : 0)}, minmax(0, 1fr))">
 			{#each bottomNav as item}
@@ -243,4 +246,5 @@
 			{/if}
 		</div>
 	</nav>
+	{/if}
 </div>
