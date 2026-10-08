@@ -59,10 +59,10 @@
 			</a>
 			<div class="flex shrink-0 items-center gap-1 sm:gap-2">
 				<!-- HP/tablet: menu utama di bottom nav; desktop: semua menu di header. -->
-				<a href="/marketplace/toko" class="inline-flex items-center gap-1.5 rounded-xl px-2.5 py-2 text-[13px] font-extrabold transition-colors hover:bg-primary-50 hover:text-primary-700 {aktif('/marketplace/toko') ? 'bg-primary-50 text-primary-700' : 'text-slate-500'}" aria-label="Pilih toko"><Store size={16} /> <span class="hidden max-w-40 truncate sm:inline">{toko ? toko.nama : 'Semua toko'}</span></a>
-				<a href="/marketplace/pesanan" class="inline-flex items-center gap-1.5 rounded-xl px-2.5 py-2 text-[13px] font-extrabold transition-colors hover:bg-primary-50 hover:text-primary-700 max-lg:hidden {aktif('/marketplace/pesanan') ? 'bg-primary-50 text-primary-700' : 'text-slate-500'}"><ClipboardList size={16} /> Pesanan saya</a>
-				<a href="/marketplace/notifikasi" class="inline-flex items-center gap-1.5 rounded-xl px-2.5 py-2 text-[13px] font-extrabold transition-colors hover:bg-primary-50 hover:text-primary-700 relative max-lg:hidden {aktif('/marketplace/notifikasi') ? 'bg-primary-50 text-primary-700' : 'text-slate-500'}" aria-label="Notifikasi"><Bell size={16} /><b class="num absolute -top-1 -right-1 grid size-4 place-items-center rounded-full bg-gold-400 text-[9px] text-brand-900">2</b></a>
-				<a href="/marketplace/profil" class="inline-flex items-center gap-1.5 rounded-xl px-2.5 py-2 text-[13px] font-extrabold transition-colors hover:bg-primary-50 hover:text-primary-700 max-lg:hidden {aktif('/marketplace/profil') ? 'bg-primary-50 text-primary-700' : 'text-slate-500'}" aria-label="Profil"><UserRound size={16} /></a>
+				<Button size="sm" variant={aktif('/marketplace/toko') ? 'default' : 'outline'} onclick={() => goto('/marketplace/toko')} aria-label="Pilih toko"><Store size={16} /> <span class="hidden max-w-40 truncate sm:inline">{toko ? toko.nama : 'Semua toko'}</span></Button>
+				<Button size="sm" variant={aktif('/marketplace/pesanan') ? 'default' : 'outline'} class="max-lg:hidden" onclick={() => goto('/marketplace/pesanan')}><ClipboardList size={16} /> Pesanan saya</Button>
+				<Button size="sm" variant={aktif('/marketplace/notifikasi') ? 'default' : 'outline'} class="relative max-lg:hidden" onclick={() => goto('/marketplace/notifikasi')} aria-label="Notifikasi"><Bell size={16} /><b class="num absolute -top-1 -right-1 grid size-4 place-items-center rounded-full bg-gold-400 text-[9px] text-brand-900">2</b></Button>
+				<Button size="sm" variant={aktif('/marketplace/profil') ? 'default' : 'outline'} class="max-lg:hidden" onclick={() => goto('/marketplace/profil')} aria-label="Profil"><UserRound size={16} /></Button>
 				<Button size="sm" class="ml-1" onclick={() => goto('/marketplace/keranjang')} aria-label="Buka keranjang{jumlah ? `, ${jumlah} item` : ''}">
 					<ShoppingBag size={17} strokeWidth={2.5} />
 					<span class="hidden min-[380px]:inline">Keranjang</span>
@@ -86,6 +86,6 @@
 				{/each}
 			</div>
 		</nav>
-		<a href="/marketplace/chat" class="fixed shadow-lg right-3 bottom-22 z-40 grid size-10 place-items-center rounded-full bg-primary-700 text-white transition hover:translate-y-px lg:right-6 lg:bottom-6" aria-label="Buka chat bantuan" title="Chat bantuan"><MessageCircle size={18} strokeWidth={2.5} /></a>
+		<Button size="icon" class="fixed right-3 bottom-22 z-40 rounded-full lg:right-6 lg:bottom-6" onclick={() => goto('/marketplace/chat')} aria-label="Buka chat bantuan" title="Chat bantuan"><MessageCircle size={18} strokeWidth={2.5} /></Button>
 	{/if}
 </div>
