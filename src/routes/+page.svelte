@@ -38,7 +38,7 @@
 		<div class="mx-auto max-w-6xl px-5 sm:px-8">
 			<nav class="flex h-20 items-center justify-between gap-4">
 				<div class="flex items-center gap-3">
-					<img src="/logo.png" alt="" class="size-10" />
+					<span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-white shadow-sm"><img src="/logo.png" alt="" class="size-8" /></span>
 					<div class="leading-tight">
 						<p class="font-bold">UBER POKJA</p>
 						<p class="text-xs text-brand-100">Majelis Taklim Tenjolaya</p>

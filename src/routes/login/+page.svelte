@@ -16,7 +16,7 @@
 	<!-- Panel identitas -->
 	<aside class="dots-bg relative hidden flex-col justify-between overflow-hidden bg-brand-800 p-12 text-white lg:flex">
 		<a href="/" class="flex items-center gap-3">
-			<img src="/logo.png" alt="" class="size-11" />
+			<span class="grid size-12 shrink-0 place-items-center rounded-2xl bg-white shadow-sm"><img src="/logo.png" alt="" class="size-9" /></span>
 			<div class="leading-tight">
 				<p class="font-black">UBER POKJA</p>
 				<p class="text-xs font-bold text-brand-100">Majelis Taklim Tenjolaya</p>
