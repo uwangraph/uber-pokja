@@ -27,18 +27,16 @@
 	const daftar = $derived(
 		pembelian.filter(
 			(b) =>
-				(filter === 'semua' || (filter === 'belum' ? b.bayar !== 'Lunas' : b.status === filter)) &&
+				(filter === 'semua' || b.status === filter) &&
 				(b.supplier + ' ' + b.no).toLowerCase().includes(cari.toLowerCase())
 		)
 	);
 	let sup = $state(supplier[0].nama);
 	let tgl = $state('2026-09-25');
-	let bayar = $state('Lunas');
 	let items = $state([{ produk: '1', qty: 10, harga: String(produk[0].beli) }]);
 	const total = $derived(items.reduce((s, i) => s + i.qty * (+i.harga || 0), 0));
 
 	const totalBeli = $derived(pembelian.reduce((s, b) => s + b.total, 0));
-	const belumLunas = $derived(pembelian.filter((b) => b.bayar !== 'Lunas'));
 	const menunggu = $derived(pembelian.filter((b) => b.status === 'Dipesan').length);
 
 	const opsiSupplier = supplier.map((s) => ({ value: s.nama, label: s.nama }));
@@ -65,7 +63,6 @@
 		{ key: 'tgl', label: 'Tanggal' },
 		{ key: 'total', label: 'Total', align: 'right' },
 		{ key: 'status', label: 'Barang' },
-		{ key: 'bayar', label: 'Bayar' },
 		{ key: 'aksi', label: 'Aksi', align: 'right' }
 	];
 </script>
@@ -74,12 +71,9 @@
 
 <PageHeader eyebrow="Transaksi" title="Pembelian" subtitle="Pengadaan barang dari supplier." />
 
-<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
+<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
 	<Stat label="Pembelian bulan ini" value={rupiah(totalBeli)} hint="{pembelian.length} faktur" icon="receipt" />
 	<Stat label="Menunggu diterima" value="{menunggu} faktur" hint="Barang belum datang" icon="truck" tone="gray" />
-	<div class="sm:col-span-2 lg:col-span-1">
-		<Stat label="Utang ke supplier" value={rupiah(belumLunas.reduce((s, b) => s + b.total, 0))} hint="{belumLunas.length} faktur belum lunas" icon="coins" tone="gold" />
-	</div>
 </div>
 
 
@@ -96,8 +90,6 @@
 		<span class="num font-black whitespace-nowrap">{rupiah(row.total)}</span>
 	{:else if col.key === 'status'}
 		<Badge tone={row.status === 'Diterima' ? 'green' : 'gray'}>{row.status}</Badge>
-	{:else if col.key === 'bayar'}
-		<Badge tone={row.bayar === 'Lunas' ? 'green' : 'amber'}>{row.bayar}</Badge>
 	{:else if row.status === 'Dipesan' && kelola}
 		<Button variant="outline" size="xs" onclick={() => terima(row)}>Terima barang</Button>
 	{:else}
@@ -118,8 +110,7 @@
 				items={[
 					{ value: 'semua', label: 'Semua', count: pembelian.length },
 					{ value: 'Dipesan', label: 'Dipesan', count: pembelian.filter((b) => b.status === 'Dipesan').length },
-					{ value: 'Diterima', label: 'Diterima', count: pembelian.filter((b) => b.status === 'Diterima').length },
-					{ value: 'belum', label: 'Belum lunas', count: belumLunas.length }
+					{ value: 'Diterima', label: 'Diterima', count: pembelian.filter((b) => b.status === 'Diterima').length }
 				]}
 			/>
 		{/snippet}
@@ -134,10 +125,9 @@
 
 	{#if kelola}<Modal bind:open={formOpen} title="Pembelian baru" description="Stok bertambah otomatis saat barang ditandai diterima." size="lg">
 			<div class="max-h-[65svh] overflow-y-auto overscroll-contain pr-1">
-				<div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
-					<div class="col-span-2 sm:col-span-1"><Select label="Supplier" options={opsiSupplier} bind:value={sup} /></div>
+				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+					<div><Select label="Supplier" options={opsiSupplier} bind:value={sup} /></div>
 					<DatePicker label="Tanggal" bind:value={tgl} />
-					<Select label="Pembayaran" options={[{ value: 'Lunas', label: 'Lunas' }, { value: 'Tempo', label: 'Tempo / belum lunas' }]} bind:value={bayar} />
 				</div>
 	
 				<p class="mt-6 mb-2 ml-1 text-xs font-black tracking-widest text-slate-400 uppercase">Barang</p>
@@ -188,7 +178,6 @@
 					</div>
 					<div class="mt-3 flex flex-wrap items-center gap-2 pl-13">
 						<Badge tone={b.status === 'Diterima' ? 'green' : 'gray'}>{b.status}</Badge>
-						<Badge tone={b.bayar === 'Lunas' ? 'green' : 'amber'}>{b.bayar}</Badge>
 						{#if b.status === 'Dipesan' && kelola}<Button variant="outline" size="xs" class="ml-auto" onclick={() => terima(b)}>Terima barang</Button>{/if}
 					</div>
 				</li>

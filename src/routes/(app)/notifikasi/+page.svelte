@@ -24,7 +24,7 @@
 
 <TombolKembali />
 
-<PageHeader title="Notifikasi" subtitle="Pengingat stok, piutang, pembelian, dan transaksi terbaru." />
+<PageHeader title="Notifikasi" subtitle="Pengingat stok, pembelian, dan transaksi terbaru." />
 
 <div class="mx-auto max-w-3xl">
 	<Toolbar>

@@ -35,10 +35,9 @@
 
 <PageHeader eyebrow="Toko" title={toko?.nama ?? 'Toko Saya'} subtitle="Stok titipan dari Gudang Pusat dan penjualan ke pembeli umum." />
 
-<div class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
+<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
 	<Stat label="Jenis produk" value="{stok.length} produk" hint="Dititipkan Gudang Pusat" icon="box" />
 	<Stat label="Nilai stok" value={rupiah(nilaiStok)} hint="Perkiraan harga jual" icon="layers" tone="gray" />
-	<Stat label="Piutang toko" value={rupiah(toko?.piutang ?? 0)} hint="Belum disetor ke pusat" icon="coins" tone="gold" />
 </div>
 
 <h2 class="mt-8 mb-3 text-lg font-black">Stok di toko saya</h2>
