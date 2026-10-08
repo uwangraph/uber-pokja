@@ -7,6 +7,7 @@
 	import { majelis } from '$lib/data.js';
 	import { tokoState, tokoAktif, katalogToko } from '$lib/marketplace.svelte.js';
 	import { kurangiStokMT } from '$lib/inventori.svelte.js';
+	import { metodeBayar, isCOD } from '$lib/pembayaran.js';
 	import { sudahMasukPembeli, urlMasuk } from '$lib/pembeli.js';
 
 	// Tanpa toko dipilih, tampilkan gabungan stok semua MT (bisa disaring manual
@@ -31,6 +32,7 @@
 	let pembeli = $state({ nama: '', hp: '', alamat: '' });
 	let pengiriman = $state('antar');
 	let pembayaran = $state('transfer');
+	let idTerakhir = $state(''); // pesanan terakhir untuk tombol "Bayar sekarang"
 	let pesanan = $state([]);
 	let dipilih = $state({}); // id produk -> dipilih untuk checkout
 	let storageSiap = $state(false);
@@ -131,11 +133,12 @@
 				total: barisToko.reduce((s, b) => s + b.qty * b.jual, 0),
 				pengiriman,
 				pembayaran,
-				status: pembayaran === 'tunai' ? 'Menunggu diproses' : 'Menunggu pembayaran'
+				status: pembayaran === 'cod' ? 'Menunggu diproses' : 'Menunggu pembayaran'
 			});
 			// Pesanan langsung mengurangi stok titipan MT (bukan stok Gudang Pusat).
 			for (const b of barisToko) kurangiStokMT(majelisId, b.id, b.qty);
 		}
+		idTerakhir = pesanan[0]?.id ?? '';
 		cartOpen = false;
 		suksesOpen = true;
 		for (const b of barisDipilih) {
@@ -333,7 +336,7 @@
 				<Input label="Nomor WhatsApp" inputmode="tel" placeholder="08xx-xxxx-xxxx" bind:value={pembeli.hp} />
 				<Input label="Alamat pengiriman" placeholder="Alamat lengkap" bind:value={pembeli.alamat} />
 				<Select label="Metode pengiriman" options={[{ value: 'antar', label: 'Diantar ke alamat' }, { value: 'ambil', label: 'Ambil di UBER POKJA' }]} bind:value={pengiriman} />
-				<Select label="Metode pembayaran" options={[{ value: 'transfer', label: 'Transfer bank' }, { value: 'tunai', label: 'Tunai saat pengambilan' }]} bind:value={pembayaran} />
+				<Select label="Metode pembayaran" options={metodeBayar} bind:value={pembayaran} />
 				</div>
 			</div>
 			{/if}
@@ -350,16 +353,16 @@
 	<Modal bind:open={suksesOpen} title="Pesanan berhasil dibuat" description="Terima kasih sudah berbelanja di UBER Market." size="sm">
 		<div class="py-2 text-center">
 			<span class="mx-auto grid size-14 place-items-center rounded-full bg-primary-50 text-primary-700"><PackageCheck size={28} strokeWidth={2.5} /></span>
-			<p class="mt-4 font-black text-slate-800">Selesaikan pembayaran. Setelah diverifikasi, Gudang akan memproses dan mengirim pesanan Anda.</p>
+			<p class="mt-4 font-black text-slate-800">{pembayaran === 'cod' ? 'Siapkan uang tunai. Bayar saat pesanan diterima atau diambil.' : 'Selesaikan pembayaran lewat Virtual Account dalam 60 menit.'}</p>
 		</div>
-		{#snippet footer()}<Button fullWidth onclick={() => goto('/marketplace/pesanan')}>Lacak pesanan</Button>{/snippet}
+		{#snippet footer()}{#if pembayaran === 'cod'}<Button fullWidth onclick={() => goto('/marketplace/pesanan')}>Lacak pesanan</Button>{:else}<Button fullWidth onclick={() => goto(`/marketplace/pembayaran?id=${encodeURIComponent(idTerakhir)}`)}>Bayar sekarang</Button>{/if}{/snippet}
 	</Modal>
 
 	<Modal bind:open={pesananOpen} title="Pesanan saya" description="Riwayat pembelian dan status pesanan Anda." size="lg">
 		{#if pesanan.length}
 			<div class="space-y-3">
 				{#each pesanan as p (p.id)}
-					{@const statusTampil = p.pembayaran === 'tunai' && p.status === 'Menunggu pembayaran' ? 'Menunggu diproses' : p.status}
+					{@const statusTampil = isCOD(p) && p.status === 'Menunggu pembayaran' ? 'Menunggu diproses' : p.status}
 					<div class="rounded-2xl border border-slate-200 p-4">
 						<div class="flex items-start justify-between gap-3"><div><p class="font-black text-slate-800">{p.id}</p><p class="mt-1 text-xs font-bold text-slate-400">{new Date(p.dibuatPada).toLocaleDateString('id-ID', { dateStyle: 'medium' })}</p></div><Badge tone={statusTampil === 'Selesai' ? 'green' : 'amber'}>{statusTampil}</Badge></div>
 						<p class="mt-3 text-sm font-bold text-slate-600">{p.items.map((i) => `${i.nama} × ${i.qty}`).join(', ')}</p>

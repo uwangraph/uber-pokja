@@ -51,3 +51,12 @@ export function kurangiStokMT(majelisId, produkId, qty) {
 	simpanInventori();
 	return true;
 }
+
+// Kembalikan stok MT saat pesanan marketplace dibatalkan.
+export function kembalikanStokMT(majelisId, produkId, qty) {
+	const s = inventori.stokMajelis.find((x) => x.majelisId === majelisId && x.produkId === produkId);
+	if (!s || qty <= 0) return false;
+	s.stok += qty;
+	simpanInventori();
+	return true;
+}
