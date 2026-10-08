@@ -6,15 +6,10 @@
 	import Icon from '$lib/components/Icon.svelte';
 	import { hakAkses, labelRole, majelis } from '$lib/data.js';
 	import { nav } from '$lib/nav.js';
-	import { goto } from '$app/navigation';
-	import { beranda, keluar } from '$lib/auth.js';
+	import { keluar } from '$lib/auth.js';
+	import TombolKembali from '$lib/components/TombolKembali.svelte';
 
 	let user = $state(null);
-	// Kembali ke halaman sebelumnya; kalau profil dibuka langsung dari URL, ke beranda peran.
-	function kembali() {
-		if (history.length > 1) history.back();
-		else goto(beranda(user?.role));
-	}
 	onMount(() => {
 		try { user = JSON.parse(localStorage.getItem('user') ?? 'null'); } catch {}
 	});
@@ -25,7 +20,7 @@
 
 <svelte:head><title>Profil · UBER POKJA</title></svelte:head>
 
-<Button variant="ghost" size="sm" class="mb-3 -ml-2 lg:hidden" onclick={kembali}><Icon name="chevron" class="size-4 rotate-180" /> Kembali</Button>
+<TombolKembali />
 
 <PageHeader eyebrow="Akun" title="Profil saya" subtitle="Informasi akun dan menu yang bisa Anda akses." />
 
