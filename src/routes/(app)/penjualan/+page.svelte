@@ -1,5 +1,5 @@
 <script>
-	import { Button, Card, Select, DatePicker, ToggleGroup, EmptyState, Table, showToast } from '@khwarizmi/svelte-ui';
+	import { Button, Card, Select, DatePicker, EmptyState, Table, showToast } from '@khwarizmi/svelte-ui';
 	import { ShoppingCart, SearchX } from 'lucide-svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Badge from '$lib/components/Badge.svelte';
@@ -247,15 +247,10 @@
 					<h2 class="mt-0.5 font-black">Pembayaran</h2>
 					<p class="mt-1 text-sm font-bold text-slate-400">{keteranganBayar}</p>
 				</div>{/if}
-				{#if !pemasaran}<ToggleGroup
-					bind:value={status}
-					size="sm"
-				class="w-full"
-					items={[
+				{#if !pemasaran}<Tabs items={[
 						{ value: 'Lunas', label: 'Lunas' },
 						{ value: 'Belum bayar', label: 'Belum bayar' }
-					]}
-				/>{/if}
+					]} bind:value={status} fill ariaLabel="Status pembayaran" />{/if}
 				<p class="flex items-center gap-1.5 text-xs font-bold text-slate-400"><Icon name="info" class="size-3.5" /> {pemasaran ? 'Stok berkurang setelah Gudang menyerahkan barang.' : 'Penjualan langsung langsung mengurangi stok.'}</p>
 				<Button fullWidth size="lg" class="mt-2" disabled={!baris.length} onclick={simpan}><Icon name="check" class="size-4" strokeWidth={3} /> {pemasaran ? 'Simpan pesanan' : 'Simpan transaksi'}</Button>
 			</div>
