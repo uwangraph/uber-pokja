@@ -44,7 +44,7 @@
 		if (browser) localStorage.setItem('uber-pokja:penjualan', JSON.stringify(penjualan));
 	}
 	let keranjang = $state({}); // id produk -> qty
-	let status = $state('Lunas');
+	const status = 'Lunas'; // semua penjualan langsung dicatat lunas (tanpa piutang)
 	let filter = $state('semua');
 	let cariRiwayat = $state('');
 
@@ -53,7 +53,6 @@
 	const baris = $derived(produk.filter((p) => keranjang[p.id]).map((p) => ({ ...p, qty: keranjang[p.id] })));
 	const total = $derived(baris.reduce((s, b) => s + b.qty * b.jual, 0));
 	const jumlahItem = $derived(baris.reduce((s, b) => s + b.qty, 0));
-	const keteranganBayar = $derived(status === 'Lunas' ? 'Pembayaran diterima penuh.' : 'Transaksi dicatat sebagai piutang.');
 	const riwayat = $derived(
 		penjualan.filter(
 			(t) => (filter === 'semua' || t.status === filter) && (t.pembeli + ' ' + t.no).toLowerCase().includes(cariRiwayat.toLowerCase())
@@ -107,7 +106,7 @@
 		simpanRiwayat();
 		showToast({ tone: 'success', title: 'Pembayaran diverifikasi', description: `${t.no} sudah masuk ke saldo kas.` });
 	}
-	const tone = { Lunas: 'green', 'Belum bayar': 'red', 'Menunggu diproses': 'gray', 'Menunggu pembayaran': 'amber' };
+	const tone = { Lunas: 'green', 'Menunggu diproses': 'gray', 'Menunggu pembayaran': 'amber' };
 	const hitung = (s) => penjualan.filter((t) => t.status === s).length;
 	const kolom = [
 		{ key: 'pembeli', label: 'Pembeli' },
@@ -245,12 +244,8 @@
 				{#if !pemasaran}<div>
 					<p class="text-xs font-black tracking-widest text-primary-600 uppercase">Langkah 4</p>
 					<h2 class="mt-0.5 font-black">Pembayaran</h2>
-					<p class="mt-1 text-sm font-bold text-slate-400">{keteranganBayar}</p>
+					<p class="mt-1 text-sm font-bold text-slate-400">Dibayar penuh saat transaksi.</p>
 				</div>{/if}
-				{#if !pemasaran}<Tabs items={[
-						{ value: 'Lunas', label: 'Lunas' },
-						{ value: 'Belum bayar', label: 'Belum bayar' }
-					]} bind:value={status} fill ariaLabel="Status pembayaran" />{/if}
 				<p class="flex items-center gap-1.5 text-xs font-bold text-slate-400"><Icon name="info" class="size-3.5" /> {pemasaran ? 'Stok berkurang setelah Gudang menyerahkan barang.' : 'Penjualan langsung langsung mengurangi stok.'}</p>
 				<Button fullWidth size="lg" class="mt-2" disabled={!baris.length} onclick={simpan}><Icon name="check" class="size-4" strokeWidth={3} /> {pemasaran ? 'Simpan pesanan' : 'Simpan transaksi'}</Button>
 			</div>
@@ -300,8 +295,7 @@
 				ariaLabel="Filter status pembayaran"
 				items={[
 					{ value: 'semua', label: 'Semua', count: penjualan.length },
-					{ value: 'Lunas', label: 'Lunas', count: hitung('Lunas') },
-					{ value: 'Belum bayar', label: 'Belum bayar', count: hitung('Belum bayar') }
+					{ value: 'Lunas', label: 'Lunas', count: hitung('Lunas') }
 				]}
 			/>
 		{/snippet}

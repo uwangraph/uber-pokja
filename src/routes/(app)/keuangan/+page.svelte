@@ -32,7 +32,7 @@
 		kas.filter((k) => (filter === 'semua' || k.jenis === filter) && (k.ket + ' ' + k.kategori).toLowerCase().includes(cariKas.toLowerCase()))
 	);
 	const opsiKategori = {
-		masuk: ['Penjualan', 'Pelunasan piutang', 'Lainnya'],
+		masuk: ['Penjualan', 'Lainnya'],
 		keluar: ['Operasional', 'Transport', 'Konsumsi', 'Lainnya'],
 		modal: ['Setoran anggota', 'Hibah', 'Lainnya']
 	};

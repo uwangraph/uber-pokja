@@ -14,11 +14,10 @@
 	const totalJual = penjualan.reduce((s, t) => s + t.total, 0);
 	const totalBeli = pembelian.reduce((s, t) => s + t.total, 0);
 	const nilaiStok = produk.reduce((s, p) => s + p.stok * p.beli, 0);
-	const utang = pembelian.filter((b) => b.bayar !== 'Lunas').reduce((s, b) => s + b.total, 0);
 
 	const laporan = {
-		penjualan: { judul: 'Laporan Penjualan', icon: 'cart', baris: [['Jumlah transaksi', penjualan.length + ' transaksi'], ['Sudah dibayar', rupiah(totalJual - ringkasan.piutang)], ['Piutang', rupiah(ringkasan.piutang)]], total: ['Total penjualan', rupiah(totalJual)] },
-		pembelian: { judul: 'Laporan Pembelian', icon: 'receipt', baris: [['Jumlah pembelian', pembelian.length + ' faktur'], ['Sudah dibayar', rupiah(totalBeli - utang)], ['Belum lunas ke supplier', rupiah(utang)]], total: ['Total pembelian', rupiah(totalBeli)] },
+		penjualan: { judul: 'Laporan Penjualan', icon: 'cart', baris: [['Jumlah transaksi', penjualan.length + ' transaksi'], ['Rata-rata per transaksi', rupiah(totalJual / penjualan.length)]], total: ['Total penjualan', rupiah(totalJual)] },
+		pembelian: { judul: 'Laporan Pembelian', icon: 'receipt', baris: [['Jumlah pembelian', pembelian.length + ' faktur'], ['Barang diterima', pembelian.filter((b) => b.status === 'Diterima').length + ' faktur'], ['Menunggu diterima', pembelian.filter((b) => b.status === 'Dipesan').length + ' faktur']], total: ['Total pembelian', rupiah(totalBeli)] },
 		stok: { judul: 'Laporan Stok', icon: 'layers', baris: [['Jumlah produk', produk.length + ' produk'], ['Total unit', produk.reduce((s, p) => s + p.stok, 0) + ' unit'], ['Produk menipis/habis', produk.filter((p) => p.stok <= p.min).length + ' produk']], total: ['Nilai stok (harga beli)', rupiah(nilaiStok)] },
 		keuangan: { judul: 'Laporan Keuangan', icon: 'wallet', baris: [['Modal', rupiah(ringkasan.modal)], ['Pemasukan', rupiah(ringkasan.omzetBulan)], ['Pengeluaran', '− ' + rupiah(ringkasan.pengeluaranBulan)]], total: ['Saldo akhir', rupiah(ringkasan.saldo)] }
 	};

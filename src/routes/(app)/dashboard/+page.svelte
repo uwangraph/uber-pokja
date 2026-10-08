@@ -24,7 +24,7 @@
 	const tinggi = 176; // tinggi area batang (px)
 	const terakhir = omzetMingguan.length - 1;
 	const peringatan = produk.filter((p) => statusStok(p) !== 'aman');
-	const tone = { Lunas: 'green', 'Belum bayar': 'red' };
+	const tone = { Lunas: 'green' };
 	const persenModal = Math.round((ringkasan.saldo / ringkasan.modal) * 100);
 
 	const kolom = [
@@ -70,7 +70,6 @@
 	<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:col-span-2">
 		<Stat label="Omzet bulan ini" value={rupiah(ringkasan.omzetBulan)} hint="{ringkasan.transaksiBulan} transaksi" icon="trendUp" />
 		<Stat label="Pengeluaran" value={rupiah(ringkasan.pengeluaranBulan)} hint="Beli + operasional" icon="receipt" tone="gray" />
-		<Stat label="Piutang" value={rupiah(ringkasan.piutang)} hint="Dari 2 Majelis Taklim" icon="users" tone="gold" />
 		<Stat label="Stok kritis" value="{peringatan.length} produk" hint="Menipis atau habis" icon="alert" tone="red" />
 	</div>
 </div>

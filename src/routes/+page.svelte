@@ -22,7 +22,7 @@
 		['Pembelian', 'Barang dibeli dari supplier.'],
 		['Stok', 'Stok bertambah saat barang diterima.'],
 		['Penjualan', 'Transaksi ke Majelis Taklim atau umum.'],
-		['Pembayaran', 'Lunas atau belum bayar.'],
+		['Pembayaran', 'Tercatat lunas saat transaksi.'],
 		['Keuangan', 'Pemasukan dan pengeluaran tercatat.'],
 		['Laporan', 'Rekap per periode, siap diunduh.']
 	];
