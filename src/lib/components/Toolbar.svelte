@@ -4,10 +4,24 @@
 	//   di bawah xl      : [pencarian ........][aksi]
 	//                      [filter (bisa digeser)]
 	//   tanpa pencarian  : [filter ............][aksi] (satu baris di semua layar)
+	//   pencarian + filter tanpa aksi: satu baris; di HP pencarian ringkas dan
+	//   melebar saat diketik (filter disembunyikan sementara).
 	let { search, filters, action, class: cls = '' } = $props();
+	let fokus = $state(false);
 </script>
 
-{#if !search && filters}
+{#if search && filters && !action}
+	<div class="mb-4 flex items-center gap-2 {cls}">
+		<div
+			class="min-w-0 transition-[flex-basis] duration-200 sm:flex-1 xl:max-w-72 {fokus ? 'basis-full' : 'basis-2/5'}"
+			onfocusin={() => (fokus = true)}
+			onfocusout={() => (fokus = false)}
+		>
+			{@render search()}
+		</div>
+		<div class="min-w-0 flex-1 sm:flex-none {fokus ? 'max-sm:hidden' : ''}">{@render filters()}</div>
+	</div>
+{:else if !search && filters}
 	<div class="mb-4 flex items-center gap-2 {cls}">
 		<div class="min-w-0 flex-1">{@render filters()}</div>
 		{#if action}<div class="flex shrink-0 items-center gap-2">{@render action()}</div>{/if}

@@ -29,7 +29,7 @@
 
 	const tone = { masuk: 'green', keluar: 'red', modal: 'gray' };
 	const opsiFilter = [
-		{ value: 'semua', label: 'Semua transaksi' },
+		{ value: 'semua', label: 'Semua' },
 		{ value: 'masuk', label: 'Pemasukan' },
 		{ value: 'keluar', label: 'Pengeluaran' },
 		{ value: 'modal', label: 'Modal' }
@@ -136,9 +136,8 @@
 					<Search bind:value={cariKas} id="cari-kas" placeholder="Cari keterangan…" />
 				{/snippet}
 				{#snippet filters()}
-					<!-- 4 pilihan tidak muat sebagai tab di HP: pakai dropdown -->
-					<div class="sm:hidden"><Select options={opsiFilter} bind:value={filter} aria-label="Filter arus kas" /></div>
-					<div class="max-sm:hidden"><Tabs bind:value={filter} ariaLabel="Filter arus kas" items={opsiFilter} /></div>
+					<!-- Wrapper Tabs otomatis jadi dropdown di HP (lebih dari 3 pilihan) -->
+					<Tabs bind:value={filter} ariaLabel="Filter arus kas" items={opsiFilter} />
 				{/snippet}
 			</Toolbar>
 		</div>
