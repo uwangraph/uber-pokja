@@ -1,7 +1,8 @@
 <script>
-	import { Button, Card, Input, NumberInput, Table, EmptyState, Modal, showToast } from '@khwarizmi/svelte-ui';
+	import { Button, Card, Input, NumberInput, Table, EmptyState, showToast } from '@khwarizmi/svelte-ui';
 	import { Package, SearchX } from 'lucide-svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
+	import FormSheet from '$lib/components/FormSheet.svelte';
 	import Badge from '$lib/components/Badge.svelte';
 	import Icon from '$lib/components/Icon.svelte';
 	import Tabs from '$lib/components/Tabs.svelte';
@@ -126,7 +127,7 @@
 </Toolbar>
 
 <!-- Modal tambah produk -->
-<Modal bind:open={formOpen} title="Tambah produk" description="Kode produk dibuat otomatis." size="md">
+<FormSheet bind:open={formOpen} title="Tambah produk" description="Kode produk dibuat otomatis." size="md">
 	<div class="grid gap-4 sm:grid-cols-2">
 		<div class="sm:col-span-2"><Input label="Nama produk" placeholder="mis. Beras Premium 5 kg" bind:value={baru.nama} /></div>
 		<Input label="Satuan" placeholder="pcs, pack, karung" bind:value={baru.satuan} />
@@ -140,7 +141,7 @@
 			<Button onclick={simpan}>Simpan produk</Button>
 		</div>
 	{/snippet}
-</Modal>
+</FormSheet>
 
 {#snippet sel(row, col)}
 	{#if col.key === 'nama'}
@@ -208,7 +209,7 @@
 </div>
 
 <!-- Modal ubah produk -->
-<Modal bind:open={editOpen} title="Ubah produk" description={edit ? `${edit.kode} · ${edit.nama}` : ''} size="md">
+<FormSheet bind:open={editOpen} title="Ubah produk" description={edit ? `${edit.kode} · ${edit.nama}` : ''} size="md">
 	{#if edit}
 		<div class="grid gap-4 sm:grid-cols-2">
 			<div class="sm:col-span-2"><Input label="Nama produk" bind:value={edit.nama} error={errEdit.nama} /></div>
@@ -231,4 +232,4 @@
 			<Button disabled={Object.keys(errEdit).length > 0} onclick={simpanEdit}>Simpan perubahan</Button>
 		</div>
 	{/snippet}
-</Modal>
+</FormSheet>

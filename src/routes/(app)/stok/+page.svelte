@@ -1,7 +1,8 @@
 <script>
 	import { goto } from '$app/navigation';
-	import { Button, Card, Progress, Timeline, Modal, Select, NumberInput, showToast } from '@khwarizmi/svelte-ui';
+	import { Button, Card, Progress, Timeline, Select, NumberInput, showToast } from '@khwarizmi/svelte-ui';
 	import PageHeader from '$lib/components/PageHeader.svelte';
+	import FormSheet from '$lib/components/FormSheet.svelte';
 	import Stat from '$lib/components/Stat.svelte';
 	import Icon from '$lib/components/Icon.svelte';
 	import { statusStok, majelis } from '$lib/data.js';
@@ -76,7 +77,7 @@
 		{#if kelola}
 			<Button variant="outline" onclick={() => showToast({ tone: 'info', title: 'Penyesuaian stok', description: 'Form penyesuaian stok barang.' })}><Icon name="edit" class="size-4" /> Penyesuaian</Button>
 			<Button variant="outline" onclick={bukaKirim}><Icon name="truck" class="size-4" /> Kirim ke MT</Button>
-			<Button onclick={() => goto('/pembelian')}><Icon name="plus" class="size-4" strokeWidth={3} /> Stok masuk</Button>
+			<Button onclick={() => goto('/pembelian?baru=1')}><Icon name="plus" class="size-4" strokeWidth={3} /> Stok masuk</Button>
 		{/if}
 	{/snippet}
 </PageHeader>
@@ -126,7 +127,7 @@
 	</Card>
 </div>
 
-<Modal bind:open={kirimOpen} title="Kirim stok ke MT" description="Kirim barang dari Gudang Pusat ke stok titipan MT." size="md">
+<FormSheet bind:open={kirimOpen} title="Kirim stok ke MT" description="Kirim barang dari Gudang Pusat ke stok titipan MT." size="md">
 	<div class="space-y-4">
 		<Select label="Tujuan MT" options={majelis.map((m) => ({ value: String(m.id), label: m.nama }))} bind:value={tujuan} />
 		<Select label="Produk" options={produk.map((p) => ({ value: String(p.id), label: `${p.nama} (stok ${p.stok} ${p.satuan})` }))} bind:value={produkKirim} />
@@ -139,4 +140,4 @@
 			<Button disabled={maksKirim === 0 || qtyKirim < 1} onclick={kirimKeMT}><Icon name="truck" class="size-4" /> Kirim</Button>
 		</div>
 	{/snippet}
-</Modal>
+</FormSheet>

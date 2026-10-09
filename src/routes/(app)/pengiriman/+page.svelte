@@ -1,8 +1,9 @@
 <script>
 	import { browser } from '$app/environment';
-	import { Button, Card, Modal, Select, Stepper, showToast } from '@khwarizmi/svelte-ui';
+	import { Button, Card, Select, Stepper, showToast } from '@khwarizmi/svelte-ui';
 	import { Camera, CheckCircle2, MapPin, PackageCheck, Truck, Loader2, RefreshCw, UserPlus } from 'lucide-svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
+	import FormSheet from '$lib/components/FormSheet.svelte';
 	import Badge from '$lib/components/Badge.svelte';
 	import { akun } from '$lib/data.js';
 
@@ -201,7 +202,7 @@
 	{/each}
 </div>
 
-<Modal bind:open={buktiOpen} title="Bukti serah-terima" description={kirimanAktif ? `${kirimanAktif.pesanan} · ${kirimanAktif.penerima}` : ''} size="md" onclose={tutupModal}>
+<FormSheet bind:open={buktiOpen} title="Bukti serah-terima" description={kirimanAktif ? `${kirimanAktif.pesanan} · ${kirimanAktif.penerima}` : ''} size="md" onclose={tutupModal}>
 	<p class="mb-3 text-sm font-medium text-slate-500">Ambil foto langsung dari kamera. Waktu, lokasi, dan nama kurir tercatat otomatis di dalam foto.</p>
 
 	<canvas bind:this={canvasEl} class="hidden"></canvas>
@@ -231,4 +232,4 @@
 	{/if}
 
 	{#snippet footer()}<div class="grid w-full grid-cols-[auto_1fr] gap-2 sm:flex sm:justify-end"><Button variant="outline" onclick={tutupModal}>Batal</Button><Button class="whitespace-nowrap" disabled={!fotoBukti} onclick={selesai}><CheckCircle2 size={17} /> Simpan & selesai</Button></div>{/snippet}
-</Modal>
+</FormSheet>

@@ -13,7 +13,8 @@
 	import { browser } from '$app/environment';
 	import { bolehKelola } from '$lib/data.js';
 
-	let tab = $state('baru');
+	// Daftar dulu (riwayat); form kasir dibuka lewat tab/tombol "Transaksi baru" atau ?tab=baru.
+	let tab = $state('riwayat');
 	let role = $state('');
 	let riwayatDimuat = $state(false);
 	const kelolaPenjualan = $derived(bolehKelola(role, 'penjualan'));
@@ -21,9 +22,10 @@
 	const gudang = $derived(role === 'gudang');
 	const keuangan = $derived(role === 'keuangan');
 
-	// Buka tab tertentu lewat URL, mis. /penjualan?tab=riwayat
+	// Buka tab tertentu lewat URL, mis. /penjualan?tab=baru
 	$effect(() => {
-		if (new URLSearchParams(location.search).get('tab') === 'riwayat') tab = 'riwayat';
+		const t = new URLSearchParams(location.search).get('tab');
+		if (t === 'baru' || t === 'riwayat') tab = t;
 	});
 	let pembeli = $state('1');
 	let tgl = $state('2026-09-25');
@@ -128,8 +130,8 @@
 			bind:value={tab}
 			ariaLabel="Mode penjualan"
 			items={[
-				{ value: 'baru', label: pemasaran ? 'Pesanan baru' : 'Transaksi baru' },
-				{ value: 'riwayat', label: 'Riwayat', count: penjualan.length }
+				{ value: 'riwayat', label: 'Riwayat', count: penjualan.length },
+				{ value: 'baru', label: pemasaran ? '+ Pesanan baru' : '+ Transaksi baru' }
 			]}
 		/>
 	</div>
