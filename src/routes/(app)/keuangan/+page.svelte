@@ -26,6 +26,7 @@
 	let jumlah = $state('');
 	let ket = $state('');
 	let tgl = $state('2026-09-25');
+	let ubahTanggal = $state(false);
 
 	const tone = { masuk: 'green', keluar: 'red', modal: 'gray' };
 	const opsiFilter = [
@@ -43,6 +44,7 @@
 		modal: ['Setoran anggota', 'Hibah', 'Lainnya']
 	};
 	let kategori = $state('Operasional');
+	const contohCatatan = { masuk: 'mis. Penjualan di pengajian', keluar: 'mis. Ongkos angkut barang', modal: 'mis. Setoran Ibu Aminah' };
 	// Kategori mengikuti jenis transaksi yang dipilih
 	$effect(() => {
 		if (!opsiKategori[jenis].includes(kategori)) kategori = opsiKategori[jenis][0];
@@ -120,8 +122,16 @@
 				]} bind:value={jenis} fill ariaLabel="Jenis transaksi" />
 			<Input label="Jumlah" prefix="Rp" inputmode="numeric" placeholder="0" bind:value={jumlah} />
 			<Select label="Kategori" options={opsiKategori[jenis].map((k) => ({ value: k, label: k }))} bind:value={kategori} />
-			<Input label="Keterangan" placeholder="mis. Ongkos angkut barang" bind:value={ket} />
-			<DatePicker label="Tanggal" bind:value={tgl} />
+			<Input label="Catatan (opsional)" placeholder={contohCatatan[jenis]} bind:value={ket} />
+			<!-- Tanggal biasanya hari ini: cukup baris kecil, pemilih tanggal muncul bila diubah -->
+			{#if ubahTanggal}
+				<DatePicker label="Tanggal" bind:value={tgl} />
+			{:else}
+				<p class="flex items-center gap-1.5 text-sm font-bold text-slate-500">
+					<Icon name="calendar" class="size-4" /> {tanggal(tgl)}
+					<Button variant="link" size="sm" onclick={() => (ubahTanggal = true)}>Ubah</Button>
+				</p>
+			{/if}
 			<Button fullWidth size="lg" onclick={simpan}><Icon name="check" class="size-4" strokeWidth={3} /> Simpan</Button>
 		</div>
 	</Card>{/if}
