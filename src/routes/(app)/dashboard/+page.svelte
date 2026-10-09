@@ -40,7 +40,7 @@
 <PageHeader eyebrow="September 2026" title="Assalamu'alaikum, {namaDepan}" subtitle="Berikut ringkasan kondisi usaha bulan ini.">
 	{#snippet actions()}
 		<Button variant="outline" onclick={() => goto('/laporan')}><Icon name="download" class="size-4" /> Laporan</Button>
-		<Button onclick={() => goto('/penjualan')}><Icon name="plus" class="size-4" strokeWidth={3} /> Penjualan baru</Button>
+		<Button onclick={() => goto('/penjualan?tab=baru')}><Icon name="plus" class="size-4" strokeWidth={3} /> Penjualan baru</Button>
 	{/snippet}
 </PageHeader>
 
@@ -62,8 +62,8 @@
 			</div>
 		</div>
 		<div class="mt-6 grid grid-cols-2 gap-3 border-t border-white/10 pt-5">
-			<Button variant="secondary" onclick={() => goto('/keuangan')}>Catat kas</Button>
-			<Button variant="secondary" onclick={() => goto('/pembelian')}>Stok masuk</Button>
+			<Button variant="secondary" onclick={() => goto('/keuangan?catat=1')}>Catat kas</Button>
+			<Button variant="secondary" onclick={() => goto('/pembelian?baru=1')}>Stok masuk</Button>
 		</div>
 	</section>
 
@@ -130,7 +130,7 @@
 				</li>
 			{/each}
 		</ul>
-		<Button variant="outline" fullWidth class="mt-6" onclick={() => goto('/pembelian')}>Buat pembelian</Button>
+		<Button variant="outline" fullWidth class="mt-6" onclick={() => goto('/pembelian?baru=1')}>Buat pembelian</Button>
 	</Card>
 </div>
 

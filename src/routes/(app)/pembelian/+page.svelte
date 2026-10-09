@@ -1,6 +1,7 @@
 <script>
-	import { Button, Card, Modal, Select, DatePicker, Input, NumberInput, Table, showToast } from '@khwarizmi/svelte-ui';
+	import { Button, Card, Select, DatePicker, Input, NumberInput, Table, showToast } from '@khwarizmi/svelte-ui';
 	import PageHeader from '$lib/components/PageHeader.svelte';
+	import FormSheet from '$lib/components/FormSheet.svelte';
 	import Search from '$lib/components/Search.svelte';
 	import Tabs from '$lib/components/Tabs.svelte';
 	import Toolbar from '$lib/components/Toolbar.svelte';
@@ -48,6 +49,13 @@
 	function bukaPembelian() {
 		formOpen = true;
 	}
+	// /pembelian?baru=1 (dari Dashboard/Stok) langsung membuka form pembelian.
+	$effect(() => {
+		if (new URLSearchParams(location.search).get('baru') === '1') {
+			formOpen = true;
+			history.replaceState(history.state, '', location.pathname);
+		}
+	});
 	function simpan() {
 		showToast({ tone: 'success', title: 'Pembelian tersimpan', description: `${sup} · ${rupiah(total)}` });
 		items = [{ produk: '1', qty: 10, harga: String(produk[0].beli) }];
@@ -123,8 +131,8 @@
 		{/snippet}
 	</Toolbar>
 
-	{#if kelola}<Modal bind:open={formOpen} title="Pembelian baru" description="Stok bertambah otomatis saat barang ditandai diterima." size="lg">
-			<div class="max-h-[65svh] overflow-y-auto overscroll-contain pr-1">
+	{#if kelola}<FormSheet bind:open={formOpen} title="Pembelian baru" description="Stok bertambah otomatis saat barang ditandai diterima." size="lg">
+			<div>
 				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
 					<div><Select label="Supplier" options={opsiSupplier} bind:value={sup} /></div>
 					<DatePicker label="Tanggal" bind:value={tgl} />
@@ -159,7 +167,7 @@
 					</div>
 				</div>
 			{/snippet}
-	</Modal>{/if}
+	</FormSheet>{/if}
 
 	<div class="hidden md:block">
 		<Table columns={kolom} rows={daftar} cell={sel} emptyText="Tidak ada pembelian yang cocok." />

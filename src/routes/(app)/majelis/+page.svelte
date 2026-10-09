@@ -1,8 +1,9 @@
 <script>
 	import { goto } from '$app/navigation';
-	import { Button, Card, Progress, EmptyState, Input, Modal, Tooltip, showToast } from '@khwarizmi/svelte-ui';
+	import { Button, Card, Progress, EmptyState, Input, Tooltip, showToast } from '@khwarizmi/svelte-ui';
 	import { SearchX } from 'lucide-svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
+	import FormSheet from '$lib/components/FormSheet.svelte';
 	import Icon from '$lib/components/Icon.svelte';
 	import Search from '$lib/components/Search.svelte';
 	import Toolbar from '$lib/components/Toolbar.svelte';
@@ -58,7 +59,7 @@
 	{/snippet}
 </Toolbar>
 
-<Modal bind:open={formOpen} title="Tambah Majelis Taklim" description="Lengkapi data Majelis Taklim baru." size="md">
+<FormSheet bind:open={formOpen} title="Tambah Majelis Taklim" description="Lengkapi data Majelis Taklim baru." size="md">
 	<div class="grid gap-4 sm:grid-cols-2">
 		<div class="sm:col-span-2"><Input label="Nama Majelis Taklim" placeholder="mis. MT Al-Hidayah" bind:value={baru.nama} /></div>
 		<Input label="Desa" placeholder="mis. Tenjolaya" bind:value={baru.desa} />
@@ -71,7 +72,7 @@
 			<Button onclick={simpan}>Simpan Majelis Taklim</Button>
 		</div>
 	{/snippet}
-</Modal>
+</FormSheet>
 
 {#if list.length}
 	<!-- HP: daftar ringkas satu kartu -->

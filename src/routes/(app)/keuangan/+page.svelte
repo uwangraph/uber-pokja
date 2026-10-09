@@ -1,5 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
+	import FormSheet from '$lib/components/FormSheet.svelte';
 	import { Button, Card, DescriptionList, Drawer, Input, Select, DatePicker, EmptyState, showToast } from '@khwarizmi/svelte-ui';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Badge from '$lib/components/Badge.svelte';
@@ -27,6 +29,16 @@
 	let ket = $state('');
 	let tgl = $state('2026-09-25');
 	let ubahTanggal = $state(false);
+	// Form catat kas dibuka lewat tombol (bukan langsung tampil); ?catat=1 dari Dashboard.
+	let catatOpen = $state(false);
+	$effect(() => {
+		if (browser && page.url.searchParams.get('catat') === '1') {
+			catatOpen = true;
+			const u = new URL(page.url);
+			u.searchParams.delete('catat');
+			history.replaceState(history.state, '', u);
+		}
+	});
 
 	const tone = { masuk: 'green', keluar: 'red', modal: 'gray' };
 	const opsiFilter = [
@@ -73,13 +85,15 @@
 	function simpan() {
 		const nilai = +String(jumlah).replace(/\D/g, '');
 		if (!nilai) {
-			showToast({ tone: 'warning', title: 'Jumlah belum diisi', value: 'Masukkan jumlah transaksi terlebih dahulu.' });
+			showToast({ tone: 'warning', title: 'Jumlah belum diisi', description: 'Masukkan jumlah transaksi terlebih dahulu.' });
 			return;
 		}
 		kas.unshift({ tgl, jenis, kategori, ket: ket || kategori, jumlah: nilai });
-		showToast({ tone: 'success', title: 'Transaksi kas tersimpan', value: `${kategori} · ${rupiah(nilai)}` });
+		showToast({ tone: 'success', title: 'Transaksi kas tersimpan', description: `${kategori} · ${rupiah(nilai)}` });
 		jumlah = '';
 		ket = '';
+		ubahTanggal = false;
+		catatOpen = false;
 	}
 </script>
 
@@ -87,7 +101,8 @@
 
 <PageHeader eyebrow="Keuangan" title="Keuangan" subtitle="Modal, pemasukan, pengeluaran, dan saldo kas.">
 	{#snippet actions()}
-		<Button variant="outline" onclick={() => goto('/laporan')}><Icon name="file" class="size-4" /> Laporan keuangan</Button>
+		<Button variant="outline" onclick={() => goto('/laporan')}><Icon name="file" class="size-4" /> Laporan</Button>
+		{#if kelola}<Button onclick={() => (catatOpen = true)}><Icon name="plus" class="size-4" strokeWidth={3} /> Catat kas</Button>{/if}
 	{/snippet}
 </PageHeader>
 
@@ -110,11 +125,10 @@
 	</div>
 </section>
 
-<div class="mt-5 grid gap-5 xl:grid-cols-[380px_1fr]">
-	<!-- Form hanya untuk Admin dan Keuangan; role lain melihat arus kas. -->
-	{#if kelola}<Card padding="lg" class="h-fit min-w-0 xl:sticky xl:top-24">
-		<h2 class="font-black">Catat transaksi kas</h2>
-		<div class="mt-4 space-y-4">
+<!-- Form catat kas: sheet bawah di HP, modal di laptop. Hanya Admin & Keuangan. -->
+{#if kelola}
+	<FormSheet bind:open={catatOpen} title="Catat transaksi kas" description="Pemasukan, pengeluaran, atau setoran modal.">
+		<div class="space-y-4">
 			<Tabs items={[
 					{ value: 'masuk', label: 'Masuk' },
 					{ value: 'keluar', label: 'Keluar' },
@@ -132,10 +146,17 @@
 					<Button variant="link" size="sm" onclick={() => (ubahTanggal = true)}>Ubah</Button>
 				</p>
 			{/if}
-			<Button fullWidth size="lg" onclick={simpan}><Icon name="check" class="size-4" strokeWidth={3} /> Simpan</Button>
 		</div>
-	</Card>{/if}
+		{#snippet footer()}
+			<div class="grid w-full grid-cols-[auto_1fr] gap-2 sm:flex sm:justify-end">
+				<Button variant="outline" onclick={() => (catatOpen = false)}>Batal</Button>
+				<Button onclick={simpan}><Icon name="check" class="size-4" strokeWidth={3} /> Simpan</Button>
+			</div>
+		{/snippet}
+	</FormSheet>
+{/if}
 
+<div class="mt-5">
 	<!-- Arus kas -->
 	<Card padding="none" class="overflow-hidden">
 		<div class="px-5 pt-5 sm:px-6">
