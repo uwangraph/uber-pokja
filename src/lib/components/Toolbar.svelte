@@ -1,4 +1,7 @@
 <script>
+	import { tick } from 'svelte';
+	import { Button } from '@khwarizmi/svelte-ui';
+	import { Search } from 'lucide-svelte';
 	// Baris alat daftar yang seragam di semua halaman:
 	//   layar lebar (xl) : [pencarian][filter] ............ [aksi]
 	//   di bawah xl      : [pencarian ........][aksi]
@@ -8,14 +11,32 @@
 	//   melebar saat diketik (filter disembunyikan sementara).
 	let { search, filters, action, class: cls = '' } = $props();
 	let fokus = $state(false);
+	let adaIsi = $state(false);
+	let kotakCari = $state(null);
+	async function bukaCari() {
+		fokus = true;
+		await tick();
+		kotakCari?.querySelector('input')?.focus();
+	}
 </script>
 
 {#if search && filters && !action}
 	<div class="mb-4 flex items-center gap-2 {cls}">
+		<!-- HP: diam = tombol 🔍 (kolom pencarian disembunyikan); diketuk = kolom penuh & fokus.
+		     Bila masih ada teks pencarian, kolom tetap tampil setengah lebar. -->
+		{#if !fokus && !adaIsi}
+			<span class="shrink-0 sm:hidden">
+				<Button variant="outline" size="icon-lg" aria-label="Cari" onclick={bukaCari}><Search size={18} strokeWidth={2.5} /></Button>
+			</span>
+		{/if}
 		<div
-			class="min-w-0 transition-[flex-basis] duration-200 sm:flex-1 xl:max-w-72 {fokus ? 'basis-full' : 'basis-2/5'}"
+			bind:this={kotakCari}
+			class="min-w-0 transition-[flex-basis] duration-200 sm:flex-1 xl:max-w-72 {fokus ? 'max-sm:basis-full' : adaIsi ? 'max-sm:basis-1/2' : 'max-sm:hidden'}"
 			onfocusin={() => (fokus = true)}
-			onfocusout={() => (fokus = false)}
+			onfocusout={(e) => {
+				fokus = false;
+				adaIsi = Boolean(e.target?.value);
+			}}
 		>
 			{@render search()}
 		</div>
