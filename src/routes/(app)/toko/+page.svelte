@@ -139,11 +139,11 @@
 
 <PageHeader eyebrow="Toko" title={toko?.nama ?? 'Toko Saya'} subtitle="Kelola produk tokomu, stok titipan Gudang Pusat, dan penjualan ke pembeli umum." />
 
-<div class="grid grid-cols-2 gap-3 lg:grid-cols-4 sm:gap-4">
-	<Stat label="Perlu diproses" value="{perluDiproses} pesanan" hint={perluDiproses ? 'Segera kemas & kirim' : 'Tidak ada antrean'} icon="cart" tone={perluDiproses ? 'gold' : 'brand'} />
-	<Stat label="Omzet 7 hari" value={rupiah(omzet7)} hint="Pesanan terbayar" icon="wallet" />
-	<Stat label="Jenis produk" value="{stok.length} produk" hint="Titipan & milik sendiri" icon="box" tone="gray" />
-	<Stat label="Nilai stok" value={rupiah(nilaiStok)} hint="Perkiraan harga jual" icon="layers" tone="gray" />
+<div class="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
+	<Stat compact label="Perlu diproses" value="{perluDiproses} pesanan" hint={perluDiproses ? 'Segera kemas & kirim' : 'Tidak ada antrean'} icon="cart" tone={perluDiproses ? 'gold' : 'brand'} />
+	<Stat compact label="Omzet 7 hari" value={rupiah(omzet7)} hint="Pesanan terbayar" icon="wallet" />
+	<Stat compact label="Jenis produk" value="{stok.length} produk" hint="Titipan & milik sendiri" icon="box" tone="gray" />
+	<Stat compact label="Nilai stok" value={rupiah(nilaiStok)} hint="Perkiraan harga jual" icon="layers" tone="gray" />
 </div>
 
 <!-- Ringkasan penjualan -->
