@@ -1,5 +1,6 @@
 // Notifikasi contoh untuk mockup. Status "sudah dibaca" hanya disimpan di memori.
 
+import { browser } from '$app/environment';
 import { hakAkses } from './data.js';
 
 const awal = [
@@ -10,20 +11,67 @@ const awal = [
 	{ id: 6, jenis: 'stok', icon: 'layers', tone: 'amber', judul: 'Stok menipis', isi: 'Teh Celup isi 25 tersisa 4 box (minimum 15).', waktu: '3 hari lalu', href: '/stok', baru: false }
 ];
 
-export const notif = $state({ list: awal });
-
-// Notifikasi hanya relevan jika pemilik akses ke halaman tujuannya (href).
-export const untukRole = (role) => notif.list.filter((n) => hakAkses[role]?.some((href) => n.href.startsWith(href)));
-
-export const jumlahBaru = (role) => untukRole(role).filter((n) => n.baru).length;
-
-export function tandaiDibaca(id) {
-	const n = notif.list.find((x) => x.id === id);
-	if (n) n.baru = false;
+// Notifikasi marketplace (pesanan masuk untuk MT, status pesanan untuk pembeli)
+// disimpan di localStorage supaya bertahan antar sesi.
+const KEY_PASAR = 'uber-pokja:pasar:notif';
+function muatPasar() {
+	if (!browser) return [];
+	try {
+		return JSON.parse(localStorage.getItem(KEY_PASAR) ?? '[]');
+	} catch {
+		return [];
+	}
 }
 
-export function tandaiSemua(role) {
-	untukRole(role).forEach((n) => (n.baru = false));
+export const notif = $state({ list: awal, pasar: muatPasar() });
+
+function simpanPasar() {
+	if (browser) localStorage.setItem(KEY_PASAR, JSON.stringify(notif.pasar.slice(0, 60)));
+}
+
+// untuk: 'penjual' (dengan majelisId toko) atau 'pembeli'.
+export function tambahNotifPasar({ untuk, majelisId = null, judul, isi, href, tone = 'brand', icon = 'cart', t = new Date().toISOString(), baru = true }) {
+	notif.pasar.push({ id: `ps-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`, untuk, majelisId, judul, isi, href, tone, icon, t, baru });
+	notif.pasar.sort((a, b) => b.t.localeCompare(a.t));
+	simpanPasar();
+}
+
+export const notifPembeli = () => notif.pasar.filter((n) => n.untuk === 'pembeli');
+export const jumlahBaruPembeli = () => notifPembeli().filter((n) => n.baru).length;
+export function tandaiSemuaPembeli() {
+	notifPembeli().forEach((n) => (n.baru = false));
+	simpanPasar();
+}
+
+// Notifikasi hanya relevan jika pemilik akses ke halaman tujuannya (href).
+// Akun MT juga menerima notifikasi pesanan marketplace untuk tokonya.
+export function untukRole(role, majelisId = null) {
+	const dasar = notif.list.filter((n) => hakAkses[role]?.some((href) => n.href.startsWith(href)));
+	const pasar = role === 'mt' ? notif.pasar.filter((n) => n.untuk === 'penjual' && n.majelisId === majelisId) : [];
+	return [...pasar, ...dasar];
+}
+
+export const jumlahBaru = (role, majelisId = null) => untukRole(role, majelisId).filter((n) => n.baru).length;
+
+export function tandaiDibaca(id) {
+	const n = notif.list.find((x) => x.id === id) ?? notif.pasar.find((x) => x.id === id);
+	if (n) n.baru = false;
+	simpanPasar();
+}
+
+export function tandaiSemua(role, majelisId = null) {
+	untukRole(role, majelisId).forEach((n) => (n.baru = false));
+	simpanPasar();
+}
+
+// "5 menit lalu", "kemarin", dst. dari timestamp ISO.
+export function waktuRelatif(iso) {
+	const menit = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
+	if (menit < 1) return 'Baru saja';
+	if (menit < 60) return `${menit} menit lalu`;
+	if (menit < 1440) return `${Math.floor(menit / 60)} jam lalu`;
+	if (menit < 2880) return 'Kemarin';
+	return `${Math.floor(menit / 1440)} hari lalu`;
 }
 
 export const toneIcon = {

@@ -1,6 +1,6 @@
 <script>
 	import Icon from './Icon.svelte';
-	import { tandaiDibaca, toneIcon } from '../notif.svelte.js';
+	import { tandaiDibaca, toneIcon, waktuRelatif } from '../notif.svelte.js';
 	let { n, onpick = () => {} } = $props();
 </script>
 
@@ -19,6 +19,6 @@
 			{#if n.baru}<span class="mt-1.5 size-2 shrink-0 rounded-full bg-primary-500" aria-label="Belum dibaca"></span>{/if}
 		</span>
 		<span class="mt-0.5 block text-[13px] leading-snug font-bold text-slate-500">{n.isi}</span>
-		<span class="mt-1 block text-xs font-bold text-slate-400">{n.waktu}</span>
+		<span class="mt-1 block text-xs font-bold text-slate-400">{n.t ? waktuRelatif(n.t) : n.waktu}</span>
 	</span>
 </a>

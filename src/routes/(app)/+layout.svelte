@@ -18,8 +18,8 @@
 	let notifOpen = $state(false);
 	let cari = $state('');
 	let lebarLayar = $state(1280);
-	const notifSaya = $derived(untukRole(user?.role));
-	const baru = $derived(jumlahBaru(user?.role));
+	const notifSaya = $derived(untukRole(user?.role, user?.majelisId));
+	const baru = $derived(jumlahBaru(user?.role, user?.majelisId));
 
 	// Ingat pilihan ciut/lebar di browser ini
 	$effect(() => {
@@ -211,7 +211,7 @@
 		</div>
 		{#snippet footer()}
 			<div class="grid w-full grid-cols-2 gap-2">
-				<Button variant="outline" disabled={!baru} onclick={() => tandaiSemua(user?.role)} class="whitespace-nowrap">Tandai dibaca</Button>
+				<Button variant="outline" disabled={!baru} onclick={() => tandaiSemua(user?.role, user?.majelisId)} class="whitespace-nowrap">Tandai dibaca</Button>
 				<Button onclick={() => goto('/notifikasi')} class="whitespace-nowrap">Lihat semua</Button>
 			</div>
 		{/snippet}

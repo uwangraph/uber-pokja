@@ -5,6 +5,7 @@
 	import { Badge, Button } from '@khwarizmi/svelte-ui';
 	import { Bell, ClipboardList, Home, MessageCircle, ShoppingBag, Store, UserRound } from 'lucide-svelte';
 	import { tokoAktif } from '$lib/marketplace.svelte.js';
+	import { jumlahBaruPembeli } from '$lib/notif.svelte.js';
 
 	let { children } = $props();
 
@@ -39,12 +40,13 @@
 		};
 	});
 
-	const navBawah = [
+	const notifBaru = $derived(jumlahBaruPembeli());
+	const navBawah = $derived([
 		{ href: '/marketplace', label: 'Beranda', icon: Home },
-		{ href: '/marketplace/notifikasi', label: 'Notifikasi', icon: Bell, badge: 2 },
+		{ href: '/marketplace/notifikasi', label: 'Notifikasi', icon: Bell, badge: notifBaru },
 		{ href: '/marketplace/pesanan', label: 'Pesanan', icon: ClipboardList },
 		{ href: '/marketplace/profil', label: 'Profil', icon: UserRound }
-	];
+	]);
 </script>
 
 <div class="min-h-dvh bg-[#faf9f5] {fokus ? '' : 'pb-20 lg:pb-0'}">
@@ -61,7 +63,7 @@
 				<!-- HP/tablet: menu utama di bottom nav; desktop: semua menu di header. -->
 				<Button size="sm" variant={aktif('/marketplace/toko') ? 'default' : 'outline'} onclick={() => goto('/marketplace/toko')} aria-label="Pilih toko"><Store size={16} /> <span class="hidden max-w-40 truncate sm:inline">{toko ? toko.nama : 'Semua toko'}</span></Button>
 				<Button size="sm" variant={aktif('/marketplace/pesanan') ? 'default' : 'outline'} class="max-lg:hidden" onclick={() => goto('/marketplace/pesanan')}><ClipboardList size={16} /> Pesanan saya</Button>
-				<Button size="sm" variant={aktif('/marketplace/notifikasi') ? 'default' : 'outline'} class="relative max-lg:hidden" onclick={() => goto('/marketplace/notifikasi')} aria-label="Notifikasi"><Bell size={16} /><b class="num absolute -top-1 -right-1 grid size-4 place-items-center rounded-full bg-gold-400 text-[9px] text-brand-900">2</b></Button>
+				<Button size="sm" variant={aktif('/marketplace/notifikasi') ? 'default' : 'outline'} class="relative max-lg:hidden" onclick={() => goto('/marketplace/notifikasi')} aria-label="Notifikasi"><Bell size={16} />{#if notifBaru}<b class="num absolute -top-1 -right-1 grid size-4 place-items-center rounded-full bg-gold-400 text-[9px] text-brand-900">{notifBaru}</b>{/if}</Button>
 				<Button size="sm" variant={aktif('/marketplace/profil') ? 'default' : 'outline'} class="max-lg:hidden" onclick={() => goto('/marketplace/profil')} aria-label="Profil"><UserRound size={16} /></Button>
 				<Button size="sm" class="ml-1" onclick={() => goto('/marketplace/keranjang')} aria-label="Buka keranjang{jumlah ? `, ${jumlah} item` : ''}">
 					<ShoppingBag size={17} strokeWidth={2.5} />

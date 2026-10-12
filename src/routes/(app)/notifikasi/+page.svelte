@@ -11,12 +11,16 @@
 	import { browser } from '$app/environment';
 
 	let role = $state('');
+	let majelisId = $state(null);
 	$effect(() => {
-		if (browser) role = JSON.parse(localStorage.getItem('user') ?? '{}').role ?? '';
+		if (!browser) return;
+		const u = JSON.parse(localStorage.getItem('user') ?? '{}');
+		role = u.role ?? '';
+		majelisId = u.majelisId ?? null;
 	});
 	let filter = $state('semua');
-	const notifSaya = $derived(untukRole(role));
-	const baru = $derived(jumlahBaru(role));
+	const notifSaya = $derived(untukRole(role, majelisId));
+	const baru = $derived(jumlahBaru(role, majelisId));
 	const daftar = $derived(filter === 'baru' ? notifSaya.filter((n) => n.baru) : notifSaya);
 </script>
 
@@ -40,9 +44,9 @@
 			/>
 		{/snippet}
 		{#snippet action()}
-			<Button variant="outline" size="icon-lg" class="sm:hidden" disabled={!baru} onclick={() => tandaiSemua(role)} aria-label="Tandai semua dibaca" title="Tandai semua dibaca"><Icon name="check" class="size-4" strokeWidth={3} /></Button>
+			<Button variant="outline" size="icon-lg" class="sm:hidden" disabled={!baru} onclick={() => tandaiSemua(role, majelisId)} aria-label="Tandai semua dibaca" title="Tandai semua dibaca"><Icon name="check" class="size-4" strokeWidth={3} /></Button>
 			<!-- `hidden` pada Button kalah oleh inline-flex bawaannya, jadi disembunyikan lewat pembungkus -->
-			<span class="hidden sm:inline-flex"><Button variant="outline" class="h-12" disabled={!baru} onclick={() => tandaiSemua(role)}>
+			<span class="hidden sm:inline-flex"><Button variant="outline" class="h-12" disabled={!baru} onclick={() => tandaiSemua(role, majelisId)}>
 				<Icon name="check" class="size-4" strokeWidth={3} /> Tandai semua dibaca
 			</Button></span>
 		{/snippet}
