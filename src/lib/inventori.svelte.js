@@ -45,7 +45,7 @@ export function kirimStokKeMT(produkId, majelisId, qty) {
 
 // Kurangi stok MT saat terjual ke pembeli umum (marketplace).
 export function kurangiStokMT(majelisId, produkId, qty) {
-	const s = inventori.stokMajelis.find((x) => x.majelisId === majelisId && x.produkId === produkId);
+	const s = inventori.stokMajelis.find((x) => x.majelisId === majelisId && String(x.produkId) === String(produkId));
 	if (!s || qty <= 0 || qty > s.stok) return false;
 	s.stok -= qty;
 	simpanInventori();
@@ -54,9 +54,36 @@ export function kurangiStokMT(majelisId, produkId, qty) {
 
 // Kembalikan stok MT saat pesanan marketplace dibatalkan.
 export function kembalikanStokMT(majelisId, produkId, qty) {
-	const s = inventori.stokMajelis.find((x) => x.majelisId === majelisId && x.produkId === produkId);
+	const s = inventori.stokMajelis.find((x) => x.majelisId === majelisId && String(x.produkId) === String(produkId));
 	if (!s || qty <= 0) return false;
 	s.stok += qty;
+	simpanInventori();
+	return true;
+}
+
+// Produk milik toko (MT) sendiri, bukan titipan Gudang Pusat. Disimpan sebagai
+// baris stok MT dengan produkId unik, sehingga langsung tampil di marketplace.
+export function tambahProdukMT(majelisId, { nama, satuan, jual, stok, fotos = [], ...tambahan }) {
+	const produkId = `mt${majelisId}-${Date.now()}`;
+	inventori.stokMajelis.push({ majelisId, produkId, nama, satuan, jual, stok, fotos, ...tambahan, milikToko: true });
+	simpanInventori();
+	return produkId;
+}
+
+// Ubah nama/satuan/harga/stok baris stok milik toko.
+export function ubahProdukMT(majelisId, produkId, data) {
+	const s = inventori.stokMajelis.find((x) => x.majelisId === majelisId && x.produkId === produkId);
+	if (!s) return false;
+	Object.assign(s, data);
+	simpanInventori();
+	return true;
+}
+
+// Hapus produk milik toko sendiri (titipan Gudang Pusat tidak bisa dihapus).
+export function hapusProdukMT(majelisId, produkId) {
+	const i = inventori.stokMajelis.findIndex((x) => x.majelisId === majelisId && x.produkId === produkId && x.milikToko);
+	if (i < 0) return false;
+	inventori.stokMajelis.splice(i, 1);
 	simpanInventori();
 	return true;
 }

@@ -4,8 +4,10 @@
 	import { Badge, Button, Card, Checkbox, EmptyState, Input, Modal, SearchInput, Select, showToast, Tabs } from '@khwarizmi/svelte-ui';
 	import { ArrowRight, Bell, ClipboardList, Home, MapPin, MessageCircle, PackageCheck, SearchX, ShieldCheck, ShoppingBag, Store, Truck, UserRound } from 'lucide-svelte';
 	import { rupiah } from '$lib/format.js';
+	import { petaRating } from '$lib/ulasan.js';
 	import { majelis } from '$lib/data.js';
-	import { tokoState, tokoAktif, katalogToko } from '$lib/marketplace.svelte.js';
+	import FotoSlider from '$lib/components/FotoSlider.svelte';
+	import { tokoState, tokoAktif, katalogToko, fotoProduk, fotoSemua, kategoriDari, kategoriList } from '$lib/marketplace.svelte.js';
 	import { kurangiStokMT } from '$lib/inventori.svelte.js';
 	import { metodeBayar, isCOD } from '$lib/pembayaran.js';
 	import { sudahMasukPembeli, urlMasuk } from '$lib/pembeli.js';
@@ -43,12 +45,12 @@
 		orders: 'uber-pokja:marketplace:orders'
 	};
 
-	const kategoriProduk = (p) => {
-		if (p.nama.includes('Telur')) return 'Protein & Segar';
-		if (p.nama.startsWith('Mi Instan') || p.nama.includes('Teh')) return 'Makanan & Minuman';
-		return 'Bahan Pokok';
-	};
-	const kategori = ['Semua', 'Bahan Pokok', 'Protein & Segar', 'Makanan & Minuman'];
+	const kategoriProduk = kategoriDari;
+	const kategori = $derived(['Semua', ...kategoriList.filter((k) => produk.some((p) => kategoriDari(p) === k))]);
+	let rating = $state({}); // id produk -> { rata, jumlah }
+	onMount(() => {
+		rating = petaRating();
+	});
 	const visualProduk = {
 		1: { emoji: '🍚', tone: 'rice', label: 'Beras pilihan' },
 		2: { emoji: '🫙', tone: 'oil', label: 'Minyak goreng' },
@@ -263,8 +265,14 @@
 						{@const habis = p.stok === 0}
 						<article class="product-card flex min-w-0 flex-col overflow-hidden rounded-2xl border sm:rounded-[1.5rem] border-[#e8e9df] bg-white">
 							<div class="product-visual {visual(p).tone} relative grid aspect-[4/3] place-items-center sm:aspect-[4/2.65]">
-								<span class="product-emoji" role="img" aria-label={visual(p).label}>{visual(p).emoji}</span>
-								<span class="absolute top-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-black text-brand-900 shadow-sm max-sm:hidden">{kategoriProduk(p)}</span>
+								{#if fotoProduk(p)}
+									<FotoSlider fotos={fotoSemua(p)} alt={p.nama} href="/marketplace/produk/{p.id}" class="absolute inset-0" />
+								{:else}
+									<span class="product-emoji" role="img" aria-label={visual(p).label}>{visual(p).emoji}</span>
+								{/if}
+								<span class="pointer-events-none absolute top-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-black text-brand-900 shadow-sm max-sm:hidden">{kategoriProduk(p)}</span>
+								{#if p.diskon}<span class="num pointer-events-none absolute top-2 right-2 rounded-full bg-red-600 px-2 py-0.5 text-[11px] font-black text-white shadow-sm sm:top-3 sm:right-3">-{p.diskon}%</span>{/if}
+								{#if p.unggulan}<span class="pointer-events-none absolute bottom-2 left-2 rounded-full bg-gold-400 px-2 py-0.5 text-[10px] font-black text-brand-900 shadow-sm">★ Unggulan</span>{/if}
 							</div>
 							<div class="flex flex-1 flex-col p-3 sm:p-5">
 								{#if p.tokoNama}
@@ -272,12 +280,13 @@
 										<Store size={11} /> {p.tokoNama}
 									</a>
 								{/if}
-								<h3 class="line-clamp-2 min-h-10 text-sm leading-snug font-black text-slate-800 sm:min-h-11 sm:text-[15px]">{p.nama}</h3>
+								<h3 class="line-clamp-2 min-h-10 text-sm leading-snug font-black text-slate-800 sm:min-h-11 sm:text-[15px]"><a href="/marketplace/produk/{p.id}" class="hover:text-primary-700">{p.nama}</a></h3>
+								{#if rating[p.id]}<p class="mt-1 flex items-center gap-1 text-xs font-bold text-slate-500"><span class="text-gold-500">★</span><span class="num font-black text-slate-700">{rating[p.id].rata.toFixed(1)}</span> ({rating[p.id].jumlah})</p>{/if}
 								<div class="mt-2 flex items-center justify-between gap-2">
 									<p class="text-xs font-medium text-slate-500">Stok {p.stok} {p.satuan}</p>
 									{#if habis}<Badge tone="red">Habis</Badge>{:else if p.stok <= p.min}<Badge tone="amber">Terbatas</Badge>{/if}
 								</div>
-								<div class="mt-2 flex flex-wrap items-baseline gap-x-1 sm:mt-4"><p class="num text-base font-black tracking-tight text-brand-800 sm:text-xl">{rupiah(p.jual)}</p><span class="text-xs font-medium text-slate-400">/ {p.satuan}</span></div>
+								<div class="mt-2 flex flex-wrap items-baseline gap-x-1 sm:mt-4"><p class="num text-base font-black tracking-tight text-brand-800 sm:text-xl">{rupiah(p.jual)}</p><span class="text-xs font-medium text-slate-400">/ {p.satuan}</span>{#if p.diskon}<span class="num text-xs font-bold text-slate-400 line-through">{rupiah(p.hargaAsli)}</span>{/if}</div>
 								{#if qty}
 									<div class="mt-3 flex items-center justify-between rounded-2xl border border-primary-300 bg-primary-50 p-1 sm:mt-4 sm:p-1.5 shadow-[0_3px_0_0_#a8dbc0]">
 										<Button variant="ghost" size="icon-sm" aria-label="Kurangi {p.nama}" onclick={() => ubah(p, -1)}>−</Button>
@@ -309,7 +318,7 @@
 				{#each baris as b}
 					<div class="grid grid-cols-[auto_auto_minmax(0,1fr)] gap-3 rounded-3xl border p-4 transition {dipilih[b.id] ? 'border-primary-300 bg-primary-50/30' : 'border-slate-200 bg-white'} sm:grid-cols-[auto_auto_minmax(0,1fr)_auto] sm:items-center">
 						<div class="flex items-center self-center" aria-label="Pilih {b.nama}"><Checkbox checked={Boolean(dipilih[b.id])} onchange={() => togglePilih(b.id)} /></div>
-						<div class="product-visual {visual(b).tone} grid size-16 shrink-0 place-items-center rounded-2xl text-3xl" role="img" aria-label={visual(b).label}>{visual(b).emoji}</div>
+						<div class="product-visual {visual(b).tone} grid size-16 shrink-0 place-items-center overflow-hidden rounded-2xl text-3xl" role="img" aria-label={visual(b).label}>{#if fotoProduk(b)}<img src={fotoProduk(b)} alt="" class="size-full object-cover" />{:else}{visual(b).emoji}{/if}</div>
 						<div class="min-w-0">
 							<p class="truncate text-base font-black text-slate-800">{b.nama}</p>
 							<p class="num mt-1 text-sm font-bold text-slate-400">{rupiah(b.jual)} / {b.satuan}</p>

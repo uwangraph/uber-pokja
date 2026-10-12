@@ -5,7 +5,7 @@
 	import { ChevronLeft, MapPin, ShoppingBag } from 'lucide-svelte';
 	import { rupiah } from '$lib/format.js';
 	import { majelis } from '$lib/data.js';
-	import { tokoState, tokoAktif, katalogToko, emojiProduk } from '$lib/marketplace.svelte.js';
+	import { tokoState, tokoAktif, katalogToko, emojiProduk, fotoProduk } from '$lib/marketplace.svelte.js';
 	import { kurangiStokMT } from '$lib/inventori.svelte.js';
 	import { metodeBayar } from '$lib/pembayaran.js';
 	import { sudahMasukPembeli, urlMasuk } from '$lib/pembeli.js';
@@ -77,7 +77,7 @@
 				<section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
 					<div class="flex items-center justify-between border-b border-slate-100 px-5 py-4"><div><h2 class="font-black">Produk pesanan</h2><p class="mt-1 text-sm font-medium text-slate-500">Dijual dan diproses oleh UBER Market.</p></div><a href="/marketplace/keranjang" class="text-sm font-black text-primary-700">Ubah</a></div>
 					{#each baris as p}
-						<article class="flex gap-3 border-b border-slate-100 px-5 py-4 last:border-0"><span class="grid size-16 shrink-0 place-items-center rounded-2xl bg-primary-50 text-3xl">{emojiProduk(p)}</span><div class="min-w-0 flex-1"><p class="font-black text-slate-800">{p.nama}</p><p class="num mt-1 text-sm font-bold text-slate-400">{rupiah(p.jual)} / {p.satuan}</p><div class="mt-3 flex justify-between gap-3 text-sm"><span class="font-bold text-slate-500">Jumlah: {p.qty}</span><strong class="num text-primary-800">{rupiah(p.qty * p.jual)}</strong></div></div></article>
+						<article class="flex gap-3 border-b border-slate-100 px-5 py-4 last:border-0"><span class="grid size-16 shrink-0 place-items-center overflow-hidden rounded-2xl bg-primary-50 text-3xl">{#if fotoProduk(p)}<img src={fotoProduk(p)} alt="" class="size-full object-cover" />{:else}{emojiProduk(p)}{/if}</span><div class="min-w-0 flex-1"><p class="font-black text-slate-800">{p.nama}</p><p class="num mt-1 text-sm font-bold text-slate-400">{rupiah(p.jual)} / {p.satuan}</p><div class="mt-3 flex justify-between gap-3 text-sm"><span class="font-bold text-slate-500">Jumlah: {p.qty}</span><strong class="num text-primary-800">{rupiah(p.qty * p.jual)}</strong></div></div></article>
 					{/each}
 					<div class="bg-slate-50 px-5 py-3 text-sm font-bold text-slate-500">Pengiriman: <span class="text-slate-800">{pengiriman === 'antar' ? 'Diantar ke alamat' : 'Ambil di UBER POKJA'}</span></div>
 				</section>

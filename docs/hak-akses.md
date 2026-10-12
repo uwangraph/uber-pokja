@@ -10,7 +10,7 @@ Sumber: `hakAkses` dan `izin` di [src/lib/data.js](../src/lib/data.js).
 | Keuangan | Dashboard, Keuangan, Penjualan, Pembelian, Produk, Stok, Laporan | Keuangan: kelola · lainnya: lihat · Laporan: keuangan |
 | Gudang | Stok, Pembelian, Produk, Penjualan, Pengiriman, Laporan | Pembelian, Produk, Stok, Pengiriman: kelola · Penjualan: lihat · Laporan: stok |
 | Pemasaran | Dashboard, Penjualan, Majelis, Laporan | Penjualan, Majelis: kelola · Dashboard: lihat · Laporan: penjualan |
-| MT | Toko Saya | Toko: kelola (saat ini hanya bisa melihat, belum ada aksi) |
+| MT | Toko Saya | Toko: tambah/ubah/hapus produk sendiri (tampil di marketplace), ubah harga jual titipan Gudang Pusat |
 
 Pembeli umum hanya memakai halaman `/marketplace`. Melihat katalog tidak perlu login, tetapi untuk memesan pembeli harus login dulu agar data pribadinya (nama, kontak, alamat) terisi.
 
