@@ -38,12 +38,12 @@
 		showToast({ tone: 'success', title: 'Nomor disalin', description: `Nomor VA ${bankAktif.nama} disalin.` });
 	}
 	function bayar() {
-		ubahPesanan(order.id, { status: 'Menunggu diproses', bank, dibayarPada: new Date().toISOString() });
+		ubahPesanan(order.id, { status: 'Menunggu diproses', bank, dibayarPada: new Date().toISOString() }, 'pembeli');
 		showToast({ tone: 'success', title: 'Pembayaran berhasil', description: `${rupiah(order.total)} via VA ${bankAktif.nama}. Pesanan diteruskan ke Gudang.` });
 		goto('/marketplace/pesanan');
 	}
 	function batalkan() {
-		order = ubahPesanan(order.id, { status: 'Dibatalkan', alasanBatal: 'Dibatalkan pembeli' });
+		order = ubahPesanan(order.id, { status: 'Dibatalkan', alasanBatal: 'Dibatalkan pembeli' }, 'pembeli');
 		showToast({ tone: 'info', title: 'Pesanan dibatalkan', description: 'Stok dikembalikan ke toko.' });
 	}
 </script>

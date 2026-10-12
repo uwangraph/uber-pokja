@@ -9,7 +9,7 @@
 	import FotoSlider from '$lib/components/FotoSlider.svelte';
 	import { tokoState, tokoAktif, katalogToko, fotoProduk, fotoSemua, kategoriDari, kategoriList } from '$lib/marketplace.svelte.js';
 	import { kurangiStokMT } from '$lib/inventori.svelte.js';
-	import { metodeBayar, isCOD } from '$lib/pembayaran.js';
+	import { metodeBayar, isCOD, notifPesananBaru } from '$lib/pembayaran.js';
 	import { sudahMasukPembeli, urlMasuk } from '$lib/pembeli.js';
 
 	// Tanpa toko dipilih, tampilkan gabungan stok semua MT (bisa disaring manual
@@ -131,14 +131,16 @@
 				majelisId,
 				tokoNama,
 				pembeli: { ...pembeli },
-				items: barisToko.map((b) => ({ id: b.id, nama: b.nama, qty: b.qty, satuan: b.satuan, harga: b.jual })),
+				items: barisToko.map((b) => ({ id: b.id, produkId: b.produkId, nama: b.nama, qty: b.qty, satuan: b.satuan, harga: b.jual })),
 				total: barisToko.reduce((s, b) => s + b.qty * b.jual, 0),
 				pengiriman,
 				pembayaran,
 				status: pembayaran === 'cod' ? 'Menunggu diproses' : 'Menunggu pembayaran'
 			});
+			pesanan[0].riwayat = [{ status: pesanan[0].status, t: pesanan[0].dibuatPada }];
+			notifPesananBaru($state.snapshot(pesanan[0]));
 			// Pesanan langsung mengurangi stok titipan MT (bukan stok Gudang Pusat).
-			for (const b of barisToko) kurangiStokMT(majelisId, b.id, b.qty);
+			for (const b of barisToko) kurangiStokMT(majelisId, b.produkId, b.qty);
 		}
 		idTerakhir = pesanan[0]?.id ?? '';
 		cartOpen = false;

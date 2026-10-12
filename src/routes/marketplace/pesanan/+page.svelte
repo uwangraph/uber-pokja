@@ -1,11 +1,12 @@
 <script>
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { Banknote, ChevronLeft, CreditCard, PackageCheck, Truck } from 'lucide-svelte';
+	import { Banknote, ChevronLeft, ChevronRight, CreditCard, PackageCheck, Truck } from 'lucide-svelte';
 	import { Button, EmptyState, Tabs, showToast } from '@khwarizmi/svelte-ui';
 	import Badge from '$lib/components/Badge.svelte';
 	import { rupiah } from '$lib/format.js';
-	import { bankVA, isCOD, ubahPesanan } from '$lib/pembayaran.js';
+	import { bankVA, isCOD } from '$lib/pembayaran.js';
+	import { pesanUlang } from '$lib/marketplace.svelte.js';
 
 	let pesanan = $state([]);
 	let tab = $state('Semua');
@@ -24,11 +25,11 @@
 	}
 	onMount(muat);
 
-	// Simulasi COD: kurir/petugas menerima uang tunai saat barang diserahkan.
-	function simulasiCOD(p) {
-		ubahPesanan(p.id, { status: 'Selesai', dibayarPada: new Date().toISOString() });
-		muat();
-		showToast({ tone: 'success', title: 'COD selesai', description: `${rupiah(p.total)} diterima tunai. Pesanan selesai.` });
+	function ulang(p) {
+		const { ditambah, dilewati } = pesanUlang(p);
+		if (!ditambah) return showToast({ tone: 'warning', title: 'Produk tidak tersedia', description: 'Semua barang pada pesanan ini sedang habis.' });
+		showToast({ tone: 'success', title: 'Ditambahkan ke keranjang', description: dilewati ? `${ditambah} produk masuk, ${dilewati} produk habis.` : `${ditambah} produk dari pesanan ini.` });
+		goto('/marketplace/keranjang');
 	}
 </script>
 
@@ -53,7 +54,10 @@
 						</div>
 						<div class="shrink-0"><Badge tone={tone[kat]}>{kat}</Badge></div>
 					</div>
-					<p class="mt-4 text-sm font-bold text-slate-600">{p.items.map((i) => `${i.nama} × ${i.qty}`).join(', ')}</p>
+					<a href="/marketplace/pesanan/{encodeURIComponent(p.id)}" class="mt-4 flex items-center justify-between gap-2 text-sm font-bold text-slate-600 hover:text-primary-700">
+						<span class="min-w-0">{p.items.map((i) => `${i.nama} × ${i.qty}`).join(', ')}</span>
+						<span class="flex shrink-0 items-center text-xs font-black text-primary-700">Detail<ChevronRight size={16} /></span>
+					</a>
 
 					<!-- Info pembayaran per metode & status -->
 					<div class="mt-3 rounded-xl px-3 py-2.5 text-sm {p.status === 'Dibatalkan' ? 'bg-red-50 text-red-900' : cod ? 'bg-emerald-50 text-emerald-900' : 'bg-primary-50 text-primary-900'}">
@@ -77,8 +81,10 @@
 						<span class="flex items-center gap-1.5 text-xs font-bold text-slate-400"><Truck size={14} /> {p.pengiriman === 'ambil' ? 'Ambil di UBER POKJA' : 'Diantar ke alamat'} · <strong class="num text-primary-800">{rupiah(p.total)}</strong></span>
 						{#if p.status === 'Menunggu pembayaran'}
 							<Button size="sm" onclick={() => goto(`/marketplace/pembayaran?id=${encodeURIComponent(p.id)}`)}>Bayar sekarang</Button>
-						{:else if cod && !p.dibayarPada && p.status !== 'Dibatalkan'}
-							<Button size="sm" variant="outline" onclick={() => simulasiCOD(p)}>Simulasi: terima & bayar</Button>
+						{:else if p.status === 'Selesai' || p.status === 'Dibatalkan'}
+							<Button size="sm" variant="outline" onclick={() => ulang(p)}>Pesan lagi</Button>
+						{:else}
+							<Button size="sm" variant="ghost" onclick={() => goto(`/marketplace/pesanan/${encodeURIComponent(p.id)}`)}>Lacak pesanan</Button>
 						{/if}
 					</div>
 				</article>

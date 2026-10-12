@@ -7,7 +7,7 @@
 	import { majelis } from '$lib/data.js';
 	import { tokoState, tokoAktif, katalogToko, emojiProduk, fotoProduk } from '$lib/marketplace.svelte.js';
 	import { kurangiStokMT } from '$lib/inventori.svelte.js';
-	import { metodeBayar } from '$lib/pembayaran.js';
+	import { metodeBayar, notifPesananBaru } from '$lib/pembayaran.js';
 	import { sudahMasukPembeli, urlMasuk } from '$lib/pembeli.js';
 
 	const produk = $derived(katalogToko(tokoState.majelisId));
@@ -43,11 +43,13 @@
 		let orderPertama = null;
 		for (const [majelisId, barisToko] of perToko) {
 			const tokoNama = barisToko[0]?.tokoNama ?? toko?.nama ?? majelis.find((m) => m.id === majelisId)?.nama ?? '';
-			const order = { id: 'MP-' + Date.now() + (urutan++), dibuatPada: new Date().toISOString(), majelisId, tokoNama, pembeli: { ...pembeli }, items: barisToko.map((p) => ({ id: p.id, nama: p.nama, qty: p.qty, satuan: p.satuan, harga: p.jual })), total: barisToko.reduce((s, p) => s + p.qty * p.jual, 0), pengiriman, pembayaran, status: pembayaran === 'cod' ? 'Menunggu diproses' : 'Menunggu pembayaran' };
+			const order = { id: 'MP-' + Date.now() + (urutan++), dibuatPada: new Date().toISOString(), majelisId, tokoNama, pembeli: { ...pembeli }, items: barisToko.map((p) => ({ id: p.id, produkId: p.produkId, nama: p.nama, qty: p.qty, satuan: p.satuan, harga: p.jual })), total: barisToko.reduce((s, p) => s + p.qty * p.jual, 0), pengiriman, pembayaran, status: pembayaran === 'cod' ? 'Menunggu diproses' : 'Menunggu pembayaran' };
+			order.riwayat = [{ status: order.status, t: order.dibuatPada }];
 			pesanan.unshift(order);
+			notifPesananBaru(order);
 			orderPertama ??= order;
 			// Pesanan langsung mengurangi stok titipan MT (bukan stok Gudang Pusat).
-			for (const p of barisToko) kurangiStokMT(majelisId, p.id, p.qty);
+			for (const p of barisToko) kurangiStokMT(majelisId, p.produkId, p.qty);
 		}
 		for (const p of baris) { delete keranjang[p.id]; delete dipilih[p.id]; }
 		localStorage.setItem('uber-pokja:marketplace:orders', JSON.stringify(pesanan));

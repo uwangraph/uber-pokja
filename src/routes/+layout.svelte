@@ -2,7 +2,11 @@
 	import '../app.css';
 	import { Toast } from '@khwarizmi/svelte-ui';
 	import { geserTutup } from '$lib/geserTutup.js';
+	import { browser } from '$app/environment';
+	import { isiContohPesanan } from '$lib/contohPesanan.js';
 	let { children } = $props();
+	// Mockup: isi pesanan contoh sebelum halaman anak membaca localStorage.
+	if (browser) isiContohPesanan();
 </script>
 
 {@render children()}
