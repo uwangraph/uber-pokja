@@ -111,6 +111,16 @@
 <div class="min-h-dvh lg:flex">
 	<!-- Sidebar desktop -->
 	<aside class="sticky top-0 z-30 hidden h-dvh shrink-0 flex-col border-r border-line bg-white transition-[width] duration-200 lg:flex {ciut ? 'w-16' : 'w-64'}">
+		<!-- Tombol ciut/lebar: ikon saja, di ujung garis sidebar sejajar garis navbar -->
+		<button
+			type="button"
+			class="absolute top-16 -right-3 z-40 grid size-6 -translate-y-1/2 place-items-center rounded-full border border-line bg-white text-muted shadow-sm transition hover:text-brand-700"
+			aria-label={ciut ? 'Lebarkan sidebar' : 'Ciutkan sidebar'}
+			title={ciut ? 'Lebarkan sidebar' : 'Ciutkan sidebar'}
+			onclick={() => { ciut = !ciut; simpanCiut(ciut); }}
+		>
+			<Icon name="chevron" class="size-3.5 transition-transform {ciut ? '' : 'rotate-180'}" strokeWidth={2.5} />
+		</button>
 
 		<a href="/" class="flex h-16 shrink-0 items-center gap-3 {ciut ? 'justify-center' : 'px-5'}" title={ciut ? 'UBER POKJA' : undefined}>
 			<img src="/logo.png" alt={ciut ? 'UBER POKJA' : ''} class="size-9" />
@@ -122,9 +132,9 @@
 			{/if}
 		</a>
 
-		<!-- Menu: komponen Sidebar dengan tombol ciut bawaannya -->
-		<div class="scroll-tipis min-h-0 flex-1 overflow-y-auto">
-			<Sidebar {groups} active={activeHref} variant="minimal" collapsible bind:collapsed={ciut} onCollapsedChange={simpanCiut} />
+		<!-- Menu: komponen Sidebar (tombol ciut bawaannya disembunyikan, diganti tombol ikon di tepi) -->
+		<div class="scroll-tipis min-h-0 flex-1 overflow-y-auto [&_button[title$=sidebar]]:hidden">
+			<Sidebar {groups} active={activeHref} variant="minimal" collapsible collapsed={ciut} />
 		</div>
 
 		<div class="border-t border-line p-3">
